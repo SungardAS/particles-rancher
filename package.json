@@ -7,7 +7,12 @@
     "condensation-particles"
   ],
   "dependencies": {
-    "condensation": "^0.4.9",
+    "condensation": "sungardas/condensation#develop",
+    "particles-rds": "sungardas/particles-rds",
+    "particles-vpc": "sungardas/particles-vpc#feature/restructure",
+    "particles-ec2": "sungardas/particles-ec2#develop",
+    "particles-common-core": "sungardas/particles-common-core#develop",
+    "particles-elasticache": "sungardas/particles-elasticache",
     "config": "^1.16.0",
     "git-rev-sync": "^1.4.0",
     "gulp": "^3.9.0"

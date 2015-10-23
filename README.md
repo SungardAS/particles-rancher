@@ -11,6 +11,10 @@ Status](https://david-dm.org/SungardAS/particles-rancher.svg?branch=master)](htt
 
 ## Summary
 
+**ALPHA**
+
+This particle is in ALPHA status. It may have bugs and may change structure regurally.
+
 [Condensation](https://github.com/SungardAS/condensation) particles that create AWS CloudFormation templates.
 
 Condensation allows templates and assets to be deployed together,
