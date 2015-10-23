@@ -1,0 +1,122 @@
+{{#layout}}
+
+  {{! Network}}
+  {{#resource "module:particles-common-core" "base" logicalId="NetworkInfrastructure" type="AWS::CloudFormation::Stack"}}
+    "Properties": {
+      "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
+      "TemplateURL": "{{templateS3Url "ha/network_infrastructure.template.json"}}"
+    }
+  {{/resource}}
+
+
+  {{! Zookeepr Exhibitor}}
+  {{parameter "module:particles-common-core" "base" logicalId="ZookeeperKeyName" type="AWS::EC2::KeyPair::KeyName"}}
+
+  {{resource "module:particles-common-core" "base" logicalId="ExhibitorS3Bucket" type="AWS::S3::Bucket"}}
+
+  {{#resource "module:particles-common-core" "base"
+    logicalId="ExhibitorAdminSecurityGroup"
+    type="AWS::EC2::SecurityGroup"
+  }}
+    "Properties": {
+      "GroupDescription": "Zookeepr-Exhibitor Administration",
+      "VpcId": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.VpcId"]}
+    }
+  {{/resource}}
+
+  {{#resource "module:particles-common-core" "base" logicalId="Zookeeper" type="AWS::CloudFormation::Stack"}}
+    "Properties": {
+      "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
+      "TemplateURL": "{{templateS3Url "zookeeper/zookeeper.json"}}",
+      "Parameters": {
+        "VpcId": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.VpcId"]},
+        "Subnets": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.SubnetList"]},
+        "KeyName": {"Ref": "ZookeeperKeyName"},
+        "AdminSecurityGroup": {"Ref": "ExhibitorAdminSecurityGroup"},
+        "ExhibitorS3Bucket": {"Ref": "ExhibitorS3Bucket"},
+        "ExhibitorS3Region": {"Ref": "AWS::Region"},
+        "ExhibitorS3Prefix": "rancher-exhibitor"
+      }
+    }
+  {{/resource}}
+
+  {{! RDS }}
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="DbMasterUsername"
+    type="String"
+    default="condensation"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="DbMasterUserPassword"
+    type="String"
+    noEcho=true
+    default="password"
+    description="Default is 'password'"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="DbName"
+    type="String"
+    default="condensation"
+    description="Default is 'password'"
+  }}
+
+  {{set "module:particles-rds" "mysql/params_multi_az"}}
+  {{#resource "module:particles-common-core" "base" logicalId="RDS" type="AWS::CloudFormation::Stack"}}
+    "Properties": {
+      "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
+      "TemplateURL": "{{templateS3Url "module:particles-rds" "mysql/multi_az.template.json"}}",
+      "Parameters": {
+        "VpcId": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.VpcId"]},
+        "SubnetIds": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.SubnetList"]},
+        "DBSnapshotIdentifier": {"Ref": "DBSnapshotIdentifier"},
+        "DBSecurityGroupId": {"Ref": "DBSecurityGroupId"},
+        "DBName": {"Ref": "DbName"}
+      }
+    }
+  {{/resource}}
+
+  {{! ElastiCache }}
+  {{#resource "module:particles-common-core" "base" logicalId="Redis" type="AWS::CloudFormation::Stack"}}
+    "Properties": {
+      "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
+      "TemplateURL": "{{templateS3Url "module:particles-elasticache" "redis/multi_az.template.json"}}",
+      "Parameters": {
+        "VpcId": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.VpcId"]},
+        "SubnetIds": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.SubnetList"]}
+      }
+    }
+  {{/resource}}
+
+  {{#resource logicalId="RancherServer"}}
+    "Type": "AWS::CloudFormation::Stack",
+    "Properties": {
+      "TemplateURL": "{{templateS3Url 'ha/rancher_server.template.json'}}",
+      "Parameters": {
+        "VpcId": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.VpcId"]},
+        "SubnetIds": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.SubnetList"]},
+        "MySQLHost": {"Fn::GetAtt": [ "RDS", "Outputs.DBInstanceEndpointAddress" ] },
+        "MySQLPort": {"Fn::GetAtt": [ "RDS", "Outputs.DBInstanceEndpointPort" ] },
+        "MySQLSecurityGroupId": { "Fn::GetAtt": [ "RDS", "Outputs.DBSecurityGroupId" ] },
+        "MySQLUser": {"Ref": "DbMasterUsername"},
+        "MySQLPassword": {"Ref": "DbMasterUserPassword"},
+        "MySQLName": {"Ref": "DbName"},
+        "RedisHost": {"Fn::GetAtt": [ "Redis", "Outputs.PrimaryEndPointAddress" ] },
+        "RedisPort": {"Fn::GetAtt": [ "Redis", "Outputs.PrimaryEndPointPort" ] },
+        "RedisSecurityGroupId": {"Fn::GetAtt": [ "Redis", "Outputs.CacheSecurityGroupId" ] },
+        "ExhibitorUrl": {"Fn::GetAtt": [ "Zookeeper", "Outputs.ExhibitorDiscoveryUrl" ] },
+        "ZookeeperClientSecurityGroup": {"Fn::GetAtt": [ "Zookeeper", "Outputs.ClientSecurityGroup" ] },
+        {{!-- "AppInstanceType": {"Ref": "AppInstanceType"},
+        "AppDockerImage": {"Ref": "AppDockerImage"},
+        --}}
+        "AppClusterSize": 3,
+        "KeyName": {"Ref": "ZookeeperKeyName"}
+      }
+    }
+  {{/resource}}
+
+{{/layout}}

@@ -1,0 +1,3 @@
+[submodule "particles/cftemplates/zookeeper"]
+	path = particles/cftemplates/zookeeper
+	url = https://github.com/mbabineau/cloudformation-zookeeper

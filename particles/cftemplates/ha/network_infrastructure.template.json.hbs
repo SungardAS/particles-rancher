@@ -1,0 +1,48 @@
+---
+vpc:
+  Cidr: "10.0.0.0/16"
+  createVpcSecurityGroup: "true"
+  createInternetGateway: "true"
+  openVpcCommunication: "true"
+
+subnets:
+  -
+    name: Subnet1
+    defaultCidr: "10.0.0.0/24"
+  -
+    name: Subnet2
+    defaultCidr: "10.0.1.0/24"
+  -
+    name: Subnet3
+    defaultCidr: "10.0.2.0/24"
+---
+{{#layout}}
+
+  {{! VPC }}
+  {{
+    set "module:particles-vpc" "simple/vpc"
+    vpcLogicalId="Vpc"
+    cidrDefault=vpc.cidr
+    createVpcSecurityGroup=vpc.createVpcSecurityGroup
+    createInternetGateway=vpc.createInternetGateway
+    openVpcCommunication=vpc.openVpcCommunication
+  }}
+
+  {{! Subnets }}
+  {{#each subnets}}
+    {{
+      set "module:particles-vpc" "simple/subnet"
+      subnetLogicalId=this.name
+      defaultCidr=this.defaultCidr
+      vpcId='{"Ref": "Vpc"}'
+      routeTableId='{"Ref": "VpcRouteTable"}'
+      availabilityZone=(concat '{"Fn::Select": [' @index ',{"Fn::GetAZs": ""}]}')
+    }}
+  {{/each}}
+
+  {{#output "module:particles-common-core" "base" logicalId="SubnetList"}}
+    "Value": {"Fn::Join": [",", [{{#each subnets}}{{#if @index}},{{/if}}{"Ref": "{{this.name}}"}{{/each}}]]}
+  {{/output}}
+
+
+{{/layout}}

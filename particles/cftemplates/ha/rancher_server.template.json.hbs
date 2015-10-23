@@ -1,0 +1,384 @@
+---
+LBPortMappings:
+  -
+    source: 80
+    dest: 8080
+  -
+    source: 443
+    dest: 8080
+---
+{{#layout}}
+
+  {{!-- Infra Params --}}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="VpcId"
+    type="AWS::EC2::VPC::Id"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="SubnetIds"
+    type="List<AWS::EC2::Subnet::Id>"
+  }}
+
+
+  {{!-- MySQL Resources --}}
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="MySQLUser"
+    type="String"
+    default="msaws"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="MySQLPassword"
+    noEcho=true
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="MySQLHost"
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="MySQLPort"
+    type="Number"
+    default=3306
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="MySQLName"
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="MySQLSecurityGroupId"
+    type="AWS::EC2::SecurityGroup::Id"
+  }}
+
+  {{#resource logicalId="MySQLSecurityGroupIngress"}}
+    "Type": "AWS::EC2::SecurityGroupIngress",
+    "Properties": {
+      "GroupId": {"Ref": "MySQLSecurityGroupId"},
+      "SourceSecurityGroupId": {"Ref": "AppSecurityGroup"},
+      "FromPort": {"Ref": "MySQLPort"},
+      "ToPort": {"Ref": "MySQLPort"},
+      "IpProtocol": "tcp"
+    }
+  {{/resource}}
+
+
+  {{!-- Redis Resources --}}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="RedisHost"
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="RedisPort"
+    type="Number"
+    default=6379
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="RedisSecurityGroupId"
+    type="AWS::EC2::SecurityGroup::Id"
+  }}
+
+  {{#resource logicalId="CacheSecurityGroupIngress"}}
+    "Type": "AWS::EC2::SecurityGroupIngress",
+    "Properties": {
+      "GroupId": {"Ref": "RedisSecurityGroupId"},
+      "IpProtocol": "tcp",
+      "SourceSecurityGroupId": {"Ref": "AppSecurityGroup"},
+      "FromPort": {"Ref": "RedisPort"},
+      "ToPort": {"Ref": "RedisPort"}
+    }
+  {{/resource}}
+
+  {{!-- App Resources --}}
+
+  {{!
+    parameter "module:particles-common-core" "base"
+    logicalId="IamInstanceProfile"
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="ExhibitorUrl"
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="ZookeeperClientSecurityGroup"
+    type="AWS::EC2::SecurityGroup::Id"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="AppInstanceType"
+    type="String"
+    default="t2.medium"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="AppDockerImage"
+    type="String"
+    default="rancher/server:latest"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="AppClusterSize"
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
+    logicalId="KeyName"
+    type="String"
+  }}
+
+  {{#condition logicalId="HasKeyName"}}
+    "Fn::Not" : [{
+      "Fn::Equals" : [{"Ref" : "KeyName"}, ""]
+    }]
+  {{/condition}}
+
+  {{#resource logicalId="LBSecurityGroup"}}
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+      "GroupDescription": "MSAWS API Load Balancer",
+      "VpcId": {"Ref": "VpcId"}
+    }
+  {{/resource}}
+
+  {{#resource logicalId="AppSecurityGroup"}}
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+      "GroupDescription": "MSAWS API",
+      "VpcId": {"Ref": "VpcId"}
+    }
+  {{/resource}}
+
+  {{#each LBPortMappings}}
+    {{#resource logicalId=(concat "LBSecurityGroupIngress" this.source)}}
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "CidrIp": "0.0.0.0/0",
+        "FromPort": {{this.source}},
+        "ToPort": {{this.source}},
+        "IpProtocol": "tcp",
+        "GroupId": {"Ref": "LBSecurityGroup"}
+      },
+      "DependsOn": "LBSecurityGroup"
+    {{/resource}}
+  {{/each}}
+
+  {{#resource logicalId="AppSecurityGroupIngress"}}
+    "Type": "AWS::EC2::SecurityGroupIngress",
+    "Properties": {
+      "FromPort": 8080,
+      "ToPort": 8080,
+      "IpProtocol": "tcp",
+      "SourceSecurityGroupId": {"Ref": "LBSecurityGroup" },
+      "GroupId": {"Ref": "AppSecurityGroup"}
+    },
+    "DependsOn": "AppSecurityGroup"
+  {{/resource}}
+
+  {{#resource logicalId="LoadBalancer"}}
+    "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+    "Properties": {
+      "CrossZone": true,
+      "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
+      "Subnets": {"Ref": "SubnetIds"},
+      "Listeners": [
+        {
+          "LoadBalancerPort": "80",
+          "InstancePort": "8080",
+          "Protocol": "TCP"
+        }
+      ]
+    }
+  {{/resource}}
+
+  {{#resource logicalId="AppLogGroup"}}
+    "Type" : "AWS::Logs::LogGroup"
+  {{/resource}}
+
+  {{#resource logicalId="LaunchConfig"}}
+    "Type" : "AWS::AutoScaling::LaunchConfiguration",
+    "Metadata" : {
+      "AWS::CloudFormation::Init" : {
+        "configSets": {
+          "default": ["enableEpel","basePackages","runApp"]
+        },
+        "enableEpel": {
+          "commands": {
+            "001": {
+              "command": "yum-config-manager --enable epel"
+            }
+          }
+        },
+        "basePackages": {
+          "packages": {
+            "yum": {
+              "docker": []
+            }
+          },
+          "services": {
+            "sysvinit" : {
+              "docker" : {
+                "enabled" : "true",
+                "ensureRunning" : "true"
+              }
+            }
+          }
+        },
+        "runApp": {
+          "files": {
+            "/root/.dockercfg": {
+              "content": {"https://index.docker.io/v1/": { "auth": "c2dhc2RlcGxveTpEcHZKSTBocXZzbTZHMw==", "email": "as.us.awscto+docker-sgasdeploy@sungardas.com" } }
+            },
+            "/usr/local/bin/zk-list-nodes": {
+              "content": { "Fn::Join": ["", [
+                "#!/bin/bash -e\n",
+                "curl -s \{{zk_discovery_url}} | python -c '",
+                  "import sys, json;",
+                  "j=json.load(sys.stdin);",
+                  "servers=[\":\".join([s, str(j[\"port\"])]) for s in j[\"servers\"]];",
+                  "print \",\".join(servers)'"
+              ]]},
+              "context": {
+                "zk_discovery_url": {"Fn::Join" : ["", [ { "Ref": "ExhibitorUrl"} ]] }
+              },
+              "mode": "000755",
+              "owner": "root",
+              "group": "root"
+            }
+          },
+          "commands": {
+            "001": {
+              "command": { "Fn::Join" : ["", [
+                "/usr/bin/docker run -d ",
+                "   --restart=on-failure",
+                "   -p 8080:8080",
+                "   -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
+                "   -e 'CATTLE_HOST_API_PROXY_MODE=ha'",
+                "   -e CATTLE_ZOOKEEPER_CONNECTION_STRING=`/usr/local/bin/zk-list-nodes`",
+                "   -e 'CATTLE_HOST_API_PROXY_HOST=", {"Fn::GetAtt": ["LoadBalancer", "DNSName"]}, "'",
+                "   -e 'CATTLE_DB_CATTLE_MYSQL_NAME=", {"Ref": "MySQLName" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_USERNAME=", {"Ref": "MySQLUser" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_PASSWORD=", {"Ref": "MySQLPassword" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_MYSQL_HOST=", {"Ref": "MySQLHost" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_MYSQL_PORT=", {"Ref": "MySQLPort" }, "'",
+                "   -e 'CATTLE_REDIS_HOSTS=", {"Ref": "RedisHost" }, "'",
+                "   -e 'CATTLE_REDIS_PORT=", {"Ref": "RedisPort" }, "'",
+                "   ", { "Ref": "AppDockerImage" }
+              ]]}
+            }
+          }
+        }
+      }
+    },
+    "Properties": {
+      "ImageId": "{{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}}",
+      {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
+      "KeyName": {
+        "Fn::If" : [
+          "HasKeyName",
+          {"Ref" : "KeyName"},
+          {"Ref" : "AWS::NoValue"}
+        ]
+      },
+      "SecurityGroups": [ { "Ref" : "AppSecurityGroup" }, {"Ref": "ZookeeperClientSecurityGroup"} ],
+      "AssociatePublicIpAddress": "true",
+      "InstanceType": {"Ref": "AppInstanceType" },
+      "BlockDeviceMappings": [ { "DeviceName": "/dev/xvda", "Ebs": { "VolumeSize": "8" } } ],
+      "UserData": { "Fn::Base64": { "Fn::Join": ["", [
+        "#!/bin/bash -ex\n",
+
+        "# Helper function\n",
+        "function error_exit\n",
+        "{\n",
+        "  /opt/aws/bin/cfn-signal -e 1 -r \"$1\" ",
+        "  --stack ", { "Ref": "AWS::StackName" },
+        "  --resource AppInstanceGroup " ,
+        "  --region ", { "Ref" : "AWS::Region" }, "\n",
+        "  exit 1\n",
+        "}\n",
+
+        "# Process CloudFormation init definitions\n",
+        "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r LaunchConfig ", " -c default ",
+        "    --region ", { "Ref": "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+
+        "# All is well so signal success\n",
+        "/opt/aws/bin/cfn-signal -e 0 -r \"Stack setup complete\" ",
+        "  --stack ", {"Ref": "AWS::StackName"},
+        "  --resource AppInstanceGroup " ,
+        "  --region ", {"Ref": "AWS::Region"}, "\n",
+
+        "#EOF"
+      ]]}}
+    },
+    "DependsOn": ["AppLogGroup"]
+  {{/resource}}
+
+  {{#resource logicalId="AppInstanceGroup"}}
+    "Type": "AWS::AutoScaling::AutoScalingGroup",
+    "Properties": {
+      "AvailabilityZones": { "Fn::GetAZs": "AWS::Region" },
+      "LaunchConfigurationName" : { "Ref" : "LaunchConfig" },
+      "MinSize" : "1",
+      "MaxSize" : "9",
+      "DesiredCapacity" : { "Ref" : "AppClusterSize" },
+      "LoadBalancerNames" : [ { "Ref" : "LoadBalancer" } ],
+      "VPCZoneIdentifier" : { "Ref" : "SubnetIds" },
+      "HealthCheckGracePeriod": 180
+    },
+    "CreationPolicy": {
+      "ResourceSignal": {
+      "Count": {"Ref": "AppClusterSize"},
+        "Timeout": "PT15M"
+      }
+    },
+    "UpdatePolicy": {
+      "AutoScalingRollingUpdate": {
+        "PauseTime": "PT15M",
+        "MaxBatchSize": 2,
+        "MinInstancesInService": 1,
+        "WaitOnResourceSignals": true
+      }
+    }
+  {{/resource}}
+
+  {{#output logicalId="LoadBalancerDNSName"}}
+    "Value": {"Fn::GetAtt" : [ "LoadBalancer", "DNSName" ]}
+  {{/output}}
+
+  {{#output logicalId="AppSecurityGroupId"}}
+    "Value": {"Ref": "AppSecurityGroup"}
+  {{/output}}
+
+  {{#output logicalId="LBSecurityGroupId"}}
+    "Value": {"Ref": "LBSecurityGroup"}
+  {{/output}}
+
+
+{{/layout}}
