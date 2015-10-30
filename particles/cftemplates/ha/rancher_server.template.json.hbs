@@ -29,7 +29,7 @@ LBPortMappings:
     parameter "module:particles-common-core" "base"
     logicalId="MySQLUser"
     type="String"
-    default="msaws"
+    default="condensation"
   }}
 
   {{
@@ -163,7 +163,7 @@ LBPortMappings:
   {{#resource logicalId="LBSecurityGroup"}}
     "Type": "AWS::EC2::SecurityGroup",
     "Properties": {
-      "GroupDescription": "MSAWS API Load Balancer",
+      "GroupDescription": "Rancher API Load Balancer",
       "VpcId": {"Ref": "VpcId"}
     }
   {{/resource}}
@@ -171,7 +171,7 @@ LBPortMappings:
   {{#resource logicalId="AppSecurityGroup"}}
     "Type": "AWS::EC2::SecurityGroup",
     "Properties": {
-      "GroupDescription": "MSAWS API",
+      "GroupDescription": "Rancher API",
       "VpcId": {"Ref": "VpcId"}
     }
   {{/resource}}
@@ -214,7 +214,16 @@ LBPortMappings:
           "InstancePort": "8080",
           "Protocol": "TCP"
         }
-      ]
+      ],
+      "Policies" : [{
+        "PolicyName" : "EnableProxyProtocol",
+        "PolicyType" : "ProxyProtocolPolicyType",
+        "Attributes" : [{
+          "Name"  : "ProxyProtocol",
+            "Value" : "true"
+          }],
+        "InstancePorts": ["8080"]
+      }]
     }
   {{/resource}}
 

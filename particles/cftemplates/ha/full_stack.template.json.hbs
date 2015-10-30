@@ -43,6 +43,12 @@
   {{! RDS }}
   {{
     parameter "module:particles-common-core" "base"
+    logicalId="DbSnapshotIdentifier"
+    type="String"
+  }}
+
+  {{
+    parameter "module:particles-common-core" "base"
     logicalId="DbMasterUsername"
     type="String"
     default="condensation"
@@ -65,7 +71,7 @@
     description="Default is 'password'"
   }}
 
-  {{set "module:particles-rds" "mysql/params_multi_az"}}
+  {{! set "module:particles-rds" "mysql/params_multi_az" logicalIdPrefix="DDDDB"}}
   {{#resource "module:particles-common-core" "base" logicalId="RDS" type="AWS::CloudFormation::Stack"}}
     "Properties": {
       "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
@@ -73,8 +79,8 @@
       "Parameters": {
         "VpcId": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.VpcId"]},
         "SubnetIds": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.SubnetList"]},
-        "DBSnapshotIdentifier": {"Ref": "DBSnapshotIdentifier"},
-        "DBSecurityGroupId": {"Ref": "DBSecurityGroupId"},
+        "DBSnapshotIdentifier": {"Ref": "DbSnapshotIdentifier"},
+        {{! "DBSecurityGroupId": {"Ref": "DbSecurityGroupId"}, }}
         "DBName": {"Ref": "DbName"}
       }
     }

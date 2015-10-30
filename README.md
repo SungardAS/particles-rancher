@@ -29,7 +29,7 @@ was deployed with.
 
     > ./node_modules/.bin/gulp condensation:build
 
-## Created Resources
+## Created Resources for HA deployment
 * [Zookeeper-Exhibitor](https://github.com/mbabineau/cloudformation-zookeeper)
 * Network infrastructure with [particles-vpc](https://github.com/sungardas/particles-vpc)
 * Multi-AZ RDS with [particles-rds](https://github.com/sungardas/particles-rds)
