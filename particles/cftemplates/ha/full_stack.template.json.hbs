@@ -80,7 +80,7 @@
         "VpcId": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.VpcId"]},
         "SubnetIds": {"Fn::GetAtt": ["NetworkInfrastructure", "Outputs.SubnetList"]},
         "DBSnapshotIdentifier": {"Ref": "DbSnapshotIdentifier"},
-        {{! "DBSecurityGroupId": {"Ref": "DbSecurityGroupId"}, }}
+        "DBSecurityGroupId": "",
         "DBName": {"Ref": "DbName"}
       }
     }

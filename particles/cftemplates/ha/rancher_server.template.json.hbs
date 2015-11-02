@@ -146,6 +146,7 @@ LBPortMappings:
     parameter "module:particles-common-core" "base"
     logicalId="AppClusterSize"
     type="String"
+    default="3"
   }}
 
   {{
@@ -202,34 +203,38 @@ LBPortMappings:
     "DependsOn": "AppSecurityGroup"
   {{/resource}}
 
-  {{#resource logicalId="LoadBalancer"}}
-    "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+  {{#resource "ha/load_balancer" logicalId="LoadBalancer"}}
     "Properties": {
-      "CrossZone": true,
       "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
       "Subnets": {"Ref": "SubnetIds"},
-      "Listeners": [
-        {
-          "LoadBalancerPort": "80",
-          "InstancePort": "8080",
-          "Protocol": "TCP"
-        }
-      ],
-      "Policies" : [{
-        "PolicyName" : "EnableProxyProtocol",
-        "PolicyType" : "ProxyProtocolPolicyType",
-        "Attributes" : [{
-          "Name"  : "ProxyProtocol",
-            "Value" : "true"
-          }],
-        "InstancePorts": ["8080"]
-      }]
+      "Scheme": "internet-facing"
     }
   {{/resource}}
 
-  {{#resource logicalId="AppLogGroup"}}
-    "Type" : "AWS::Logs::LogGroup"
+  {{#resource "ha/load_balancer" logicalId="WsLoadBalancer"}}
+    "Properties": {
+      "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
+      "Subnets": {"Ref": "SubnetIds"},
+      "Scheme": "internet-facing"
+    }
   {{/resource}}
+
+  {{#resource "ha/load_balancer" logicalId="LoadBalancerInternal"}}
+    "Properties": {
+      "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
+      "Subnets": {"Ref": "SubnetIds"},
+      "Scheme": "internal"
+    }
+  {{/resource}}
+
+  {{#resource "ha/load_balancer" logicalId="WsLoadBalancerInternal"}}
+    "Properties": {
+      "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
+      "Subnets": {"Ref": "SubnetIds"},
+      "Scheme": "internal"
+    }
+  {{/resource}}
+
 
   {{#resource logicalId="LaunchConfig"}}
     "Type" : "AWS::AutoScaling::LaunchConfiguration",
@@ -290,8 +295,9 @@ LBPortMappings:
                 "   -p 8080:8080",
                 "   -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
                 "   -e 'CATTLE_HOST_API_PROXY_MODE=ha'",
+                "   -e 'DEFAULT_CATTLE_MACHINE_EXECUTE=false'",
                 "   -e CATTLE_ZOOKEEPER_CONNECTION_STRING=`/usr/local/bin/zk-list-nodes`",
-                "   -e 'CATTLE_HOST_API_PROXY_HOST=", {"Fn::GetAtt": ["LoadBalancer", "DNSName"]}, "'",
+                "   -e 'CATTLE_HOST_API_PROXY_HOST=", {"Fn::GetAtt": ["WsLoadBalancer", "DNSName"]}, "'",
                 "   -e 'CATTLE_DB_CATTLE_MYSQL_NAME=", {"Ref": "MySQLName" }, "'",
                 "   -e 'CATTLE_DB_CATTLE_USERNAME=", {"Ref": "MySQLUser" }, "'",
                 "   -e 'CATTLE_DB_CATTLE_PASSWORD=", {"Ref": "MySQLPassword" }, "'",
@@ -345,9 +351,118 @@ LBPortMappings:
 
         "#EOF"
       ]]}}
-    },
-    "DependsOn": ["AppLogGroup"]
+    }
   {{/resource}}
+
+  {{#resource logicalId="WsLaunchConfig"}}
+    "Type" : "AWS::AutoScaling::LaunchConfiguration",
+    "Metadata" : {
+      "AWS::CloudFormation::Init" : {
+        "configSets": {
+          "default": ["enableEpel","basePackages","runApp"]
+        },
+        "enableEpel": {
+          "commands": {
+            "001": {
+              "command": "yum-config-manager --enable epel"
+            }
+          }
+        },
+        "basePackages": {
+          "packages": {
+            "yum": {
+              "docker": []
+            }
+          },
+          "services": {
+            "sysvinit" : {
+              "docker" : {
+                "enabled" : "true",
+                "ensureRunning" : "true"
+              }
+            }
+          }
+        },
+        "runApp": {
+          "files": {
+            "/usr/local/bin/zk-list-nodes": {
+              "content": { "Fn::Join": ["", [
+                "#!/bin/bash -e\n",
+                "curl -s \{{zk_discovery_url}} | python -c '",
+                  "import sys, json;",
+                  "j=json.load(sys.stdin);",
+                  "servers=[\":\".join([s, str(j[\"port\"])]) for s in j[\"servers\"]];",
+                  "print \",\".join(servers)'"
+              ]]},
+              "context": {
+                "zk_discovery_url": {"Fn::Join" : ["", [ { "Ref": "ExhibitorUrl"} ]] }
+              },
+              "mode": "000755",
+              "owner": "root",
+              "group": "root"
+            }
+          },
+          "commands": {
+            "001": {
+              "command": { "Fn::Join": ["", [
+                "curl -X GET -O http://", {"Fn::GetAtt": ["LoadBalancerInternal", "DNSName"]}, "/v1/scripts/api.crt"
+              ]]}
+            },
+            "002": {
+              "command": { "Fn::Join" : ["", [
+                "/usr/bin/docker run -d ",
+                "   --restart=on-failure",
+                "   -p 8080:8080",
+                "   -v /root/api.crt:/api.crt",
+                "   rancher/server websocket-proxy -jwt-public-key-file=/api.crt -listen-address=0.0.0.0:8080"
+              ]]}
+            }
+          }
+        }
+      }
+    },
+    "Properties": {
+      "ImageId": "{{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}}",
+      {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
+      "KeyName": {
+        "Fn::If" : [
+          "HasKeyName",
+          {"Ref" : "KeyName"},
+          {"Ref" : "AWS::NoValue"}
+        ]
+      },
+      "SecurityGroups": [ { "Ref" : "AppSecurityGroup" }, {"Ref": "ZookeeperClientSecurityGroup"} ],
+      "AssociatePublicIpAddress": "true",
+      "InstanceType": {"Ref": "AppInstanceType" },
+      "BlockDeviceMappings": [ { "DeviceName": "/dev/xvda", "Ebs": { "VolumeSize": "8" } } ],
+      "UserData": { "Fn::Base64": { "Fn::Join": ["", [
+        "#!/bin/bash -ex\n",
+
+        "# Helper function\n",
+        "function error_exit\n",
+        "{\n",
+        "  /opt/aws/bin/cfn-signal -e 1 -r \"$1\" ",
+        "  --stack ", { "Ref": "AWS::StackName" },
+        "  --resource AppInstanceGroup " ,
+        "  --region ", { "Ref" : "AWS::Region" }, "\n",
+        "  exit 1\n",
+        "}\n",
+
+        "# Process CloudFormation init definitions\n",
+        "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WsLaunchConfig ", " -c default ",
+        "    --region ", { "Ref": "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+
+        "# All is well so signal success\n",
+        "/opt/aws/bin/cfn-signal -e 0 -r \"Stack setup complete\" ",
+        "  --stack ", {"Ref": "AWS::StackName"},
+        "  --resource WsInstanceGroup " ,
+        "  --region ", {"Ref": "AWS::Region"}, "\n",
+
+        "#EOF"
+      ]]}}
+    }
+  {{/resource}}
+
 
   {{#resource logicalId="AppInstanceGroup"}}
     "Type": "AWS::AutoScaling::AutoScalingGroup",
@@ -357,13 +472,13 @@ LBPortMappings:
       "MinSize" : "1",
       "MaxSize" : "9",
       "DesiredCapacity" : { "Ref" : "AppClusterSize" },
-      "LoadBalancerNames" : [ { "Ref" : "LoadBalancer" } ],
+      "LoadBalancerNames" : [ { "Ref" : "LoadBalancer" },{ "Ref" : "LoadBalancerInternal" } ],
       "VPCZoneIdentifier" : { "Ref" : "SubnetIds" },
       "HealthCheckGracePeriod": 180
     },
     "CreationPolicy": {
       "ResourceSignal": {
-      "Count": {"Ref": "AppClusterSize"},
+        "Count": {"Ref": "AppClusterSize"},
         "Timeout": "PT15M"
       }
     },
@@ -374,7 +489,37 @@ LBPortMappings:
         "MinInstancesInService": 1,
         "WaitOnResourceSignals": true
       }
-    }
+    },
+    "DependsOn": ["WsLoadBalancer","WsLoadBalancerInternal"]
+  {{/resource}}
+
+  {{#resource logicalId="WsInstanceGroup"}}
+    "Type": "AWS::AutoScaling::AutoScalingGroup",
+    "Properties": {
+      "AvailabilityZones": { "Fn::GetAZs": "AWS::Region" },
+      "LaunchConfigurationName" : { "Ref" : "WsLaunchConfig" },
+      "MinSize" : "1",
+      "MaxSize" : "1",
+      "DesiredCapacity": 1,
+      "LoadBalancerNames": [ {"Ref": "WsLoadBalancer" },{"Ref": "WsLoadBalancerInternal" } ],
+      "VPCZoneIdentifier": { "Ref" : "SubnetIds" },
+      "HealthCheckGracePeriod": 180
+    },
+    "CreationPolicy": {
+      "ResourceSignal": {
+        "Count": 1,
+        "Timeout": "PT15M"
+      }
+    },
+    "UpdatePolicy": {
+      "AutoScalingRollingUpdate": {
+        "PauseTime": "PT15M",
+        "MaxBatchSize": 2,
+        "MinInstancesInService": 1,
+        "WaitOnResourceSignals": true
+      }
+    },
+    "DependsOn": "AppInstanceGroup"
   {{/resource}}
 
   {{#output logicalId="LoadBalancerDNSName"}}

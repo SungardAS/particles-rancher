@@ -1,0 +1,32 @@
+{{#resource "module:particles-common-core" "base"}}
+  "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+  "Properties": {
+    "CrossZone": true,
+    "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
+    "Subnets": {"Ref": "SubnetIds"},
+    "Listeners": [
+      {
+        "LoadBalancerPort": "80",
+        "InstancePort": "8080",
+        "Protocol": "TCP"
+      }
+    ],
+    "Policies" : [{
+      "PolicyName" : "EnableProxyProtocol",
+      "PolicyType" : "ProxyProtocolPolicyType",
+      "Attributes" : [{
+        "Name"  : "ProxyProtocol",
+          "Value" : "true"
+        }],
+      "InstancePorts": ["8080"]
+    }],
+    "HealthCheck": {
+      "HealthyThreshold": "3",
+      "Interval": "10",
+      "Timeout": "5",
+      "UnhealthyThreshold": "2",
+      "Target": "TCP:8080"
+    }
+  }
+{{/resource}}
+
