@@ -322,7 +322,7 @@ LBPortMappings:
           {"Ref" : "AWS::NoValue"}
         ]
       },
-      "SecurityGroups": [ { "Ref" : "AppSecurityGroup" }, {"Ref": "ZookeeperClientSecurityGroup"} ],
+      "SecurityGroups": [ {"Ref": "AppSecurityGroup"}, {"Ref": "ZookeeperClientSecurityGroup"} ],
       "AssociatePublicIpAddress": "true",
       "InstanceType": {"Ref": "AppInstanceType" },
       "BlockDeviceMappings": [ { "DeviceName": "/dev/xvda", "Ebs": { "VolumeSize": "8" } } ],
@@ -406,7 +406,8 @@ LBPortMappings:
             "001": {
               "command": { "Fn::Join": ["", [
                 "curl -X GET -O http://", {"Fn::GetAtt": ["LoadBalancerInternal", "DNSName"]}, "/v1/scripts/api.crt"
-              ]]}
+              ]]},
+              "cwd": "/root"
             },
             "002": {
               "command": { "Fn::Join" : ["", [
@@ -416,13 +417,32 @@ LBPortMappings:
                 "   -v /root/api.crt:/api.crt",
                 "   rancher/server websocket-proxy -jwt-public-key-file=/api.crt -listen-address=0.0.0.0:8080"
               ]]}
+            },
+            "003": {
+              "command": { "Fn::Join" : ["", [
+                "/usr/bin/docker run -d ",
+                "   --restart=on-failure",
+                "   -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
+                "   -e 'CATTLE_HOST_API_PROXY_MODE=ha'",
+                "   -e 'DEFAULT_CATTLE_MACHINE_EXECUTE=true'",
+                "   -e CATTLE_ZOOKEEPER_CONNECTION_STRING=`/usr/local/bin/zk-list-nodes`",
+                "   -e 'CATTLE_HOST_API_PROXY_HOST=", {"Fn::GetAtt": ["WsLoadBalancer", "DNSName"]}, "'",
+                "   -e 'CATTLE_DB_CATTLE_MYSQL_NAME=", {"Ref": "MySQLName" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_USERNAME=", {"Ref": "MySQLUser" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_PASSWORD=", {"Ref": "MySQLPassword" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_MYSQL_HOST=", {"Ref": "MySQLHost" }, "'",
+                "   -e 'CATTLE_DB_CATTLE_MYSQL_PORT=", {"Ref": "MySQLPort" }, "'",
+                "   -e 'CATTLE_REDIS_HOSTS=", {"Ref": "RedisHost" }, "'",
+                "   -e 'CATTLE_REDIS_PORT=", {"Ref": "RedisPort" }, "'",
+                "   ", { "Ref": "AppDockerImage" }
+              ]]}
             }
           }
         }
       }
     },
     "Properties": {
-      "ImageId": "{{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}}",
+      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}",
       {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
       "KeyName": {
         "Fn::If" : [
@@ -471,10 +491,10 @@ LBPortMappings:
       "LaunchConfigurationName" : { "Ref" : "LaunchConfig" },
       "MinSize" : "1",
       "MaxSize" : "9",
-      "DesiredCapacity" : { "Ref" : "AppClusterSize" },
-      "LoadBalancerNames" : [ { "Ref" : "LoadBalancer" },{ "Ref" : "LoadBalancerInternal" } ],
-      "VPCZoneIdentifier" : { "Ref" : "SubnetIds" },
-      "HealthCheckGracePeriod": 180
+      "DesiredCapacity" : { "Ref": "AppClusterSize" },
+      "LoadBalancerNames" : [ {"Ref": "LoadBalancer" },{ "Ref": "LoadBalancerInternal" } ],
+      "VPCZoneIdentifier" : { "Ref": "SubnetIds" },
+      "HealthCheckGracePeriod": 90
     },
     "CreationPolicy": {
       "ResourceSignal": {
@@ -503,7 +523,7 @@ LBPortMappings:
       "DesiredCapacity": 1,
       "LoadBalancerNames": [ {"Ref": "WsLoadBalancer" },{"Ref": "WsLoadBalancerInternal" } ],
       "VPCZoneIdentifier": { "Ref" : "SubnetIds" },
-      "HealthCheckGracePeriod": 180
+      "HealthCheckGracePeriod": 90
     },
     "CreationPolicy": {
       "ResourceSignal": {
