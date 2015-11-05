@@ -11,6 +11,16 @@ var config = {
       clean: true,
       validate: true,
       create: true
+    },
+    {
+      aws: {
+        region: 'us-west-2',
+        bucket: 'condensation-particles.us-west-2'
+      },
+      prefix: 'particles-rancher/'+gitrev.branch(),
+      clean: true,
+      validate: true,
+      create: true
     }
   ],
   dist: 'dist'
