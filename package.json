@@ -1,6 +1,6 @@
 {
   "name": "particles-rancher",
-  "version": "0.0.0",
+  "version": "0.0.1.alpha.2",
   "description": "[Condensation](https://github.com/SungardAS/condensation) particles that build AWS CloudFormation templates.",
   "license": "Apache-2.0",
   "keywords": [
