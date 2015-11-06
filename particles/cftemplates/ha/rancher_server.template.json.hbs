@@ -402,7 +402,7 @@ LBPortMappings:
           "commands": {
             "001": {
               "command": { "Fn::Join": ["", [
-                "curl -X GET -O http://", {"Fn::GetAtt": ["LoadBalancerInternal", "DNSName"]}, "/v1/scripts/api.crt"
+                "until `curl -X GET -O http://", {"Fn::GetAtt": ["LoadBalancerInternal", "DNSName"]}, "/v1/scripts/api.crt`; do sleep 1; done"
               ]]},
               "cwd": "/root"
             },
