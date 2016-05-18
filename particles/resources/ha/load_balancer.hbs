@@ -1,9 +1,8 @@
-{{#resource "module:particles-common-core" "base"}}
-  "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+{{#resource "m:core" "base" type="AWS::ElasticLoadBalancing::LoadBalancer"}}
   "Properties": {
     "CrossZone": true,
-    "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
-    "Subnets": {"Ref": "SubnetIds"},
+    "SecurityGroups": {{helper "m:core" "propertyValue" securityGroups}},
+    "Subnets": {{helper "m:core" "propertyValue" subnets}},
     "Listeners": [
       {
         "LoadBalancerPort": "80",

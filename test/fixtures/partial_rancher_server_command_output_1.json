@@ -1,0 +1,16 @@
+{
+  "Fn::Join" : [ "",
+    [
+      "/usr/bin/docker run -d ",
+      "  --restart=on-failure",
+      "  -p ",
+      8080,
+      ":8080",
+      "  -e 'AWS_REGION=",
+      {"Ref": "AWS::Region"},
+      "'",
+      "  ",
+      "rancher/server"
+    ]
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "Fn::Join" : [ "",
+    [
+      "/usr/bin/docker run -d ",
+      "  --restart=on-failure",
+      "  -p ",
+      8080,
+      ":8080",
+      "  -e 'AWS_REGION=",
+      {"Ref": "AWS::Region"},
+      "'",
+      " -e CATTLE_DB_CATTLE_MYSQL_NAME=",
+      "dbName",
+      " -e CATTLE_DB_CATTLE_USERNAME=",
+      "username",
+      " -e CATTLE_DB_CATTLE_PASSWORD=",
+      "password",
+      " -e CATTLE_DB_CATTLE_MYSQL_HOST=",
+      "localhost",
+      " -e CATTLE_DB_CATTLE_MYSQL_PORT=",
+      3306,
+
+      "  ",
+      "rancher/server"
+    ]
+  ]
+}
