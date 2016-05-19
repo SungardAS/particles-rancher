@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+- 5
+- 4
+- '0.12'
+matrix:
+  include:
+  - node_js: 6
+    env: DEPLOY=true
+after_success: if [[ $DEPLOY == "true" ]] ; then ./node_modules/.bin/gulp condensation:deploy
+  ; else echo "no deploy" ; fi
+deploy:
+  provider: npm
+  email: as.us.labs@sungardas.com
+  api_key:
+    secure: dWCtCAw+5wBNVgSvfgvrr4ylumeFqKtxFjXImNmJfDw6dS3RKRGYaBCv5Hq2Z8ZLol5lxx0ao5OTMK7Dq3egOoGGPK7doUi+Jxb54LXM068fkIZGTf7yUHPQXW6TFxJfI1HeA7/EWmYRLuIDoWkyYhEsVXTvp6pQxpRf5V+A7tzUbrG2PWk89/ORTGF5L9hjAK0a8JK65Ee0/t86srFC9YIqiRvzSsmgPhAi4ChtRwL1L9DaWoUjPaMdLa41DhShdtfCRx3iFV4Ooorj8f3tj2jBdqxs6RDszNrQulIFSmwwsFXPGK2OKj4WtVZs06cCMm4/Owr5fpkVy+PIX/Sp0A9Sbs4/qHIsT/+/R2GX4byX3TCAjra8OLKEdgiwS6K4xWp/JGreCrb8iFAxiAitBIEsmOET/oNbVmbyhCLmIQU6QeJiMZ+X+Z6fwwlPh+Jr1VX7W1J1LtlI5d6REUst6ab/LgC+e7jJbHRqivAUHe79px2mrhCQnNeUo9na4i9Mj+Zxq1pIEiH3pCo00XcBXaWx1ctG4G8D2PlkKz2hviDAvG9lotoHtKQ9QlHOY37L8YtLe5D5Zs3YhLDwLh46TEjPqwXSPLuGKcATGByEDSMoLUsT9JkB6l9oEJeg356KP/rHoY+iwEHNOcot8MZehzT3H318dNofQwA8yxaMnaE=
+  on:
+    tags: true
+    repo: SungardAS/particles-rancher
+    node: 6
+env:
+  global:
+  - secure: wPglyOHaJ1ncN2yYNZs/HTNw4VT/KHFyvjdOG4KiSeN1X1cCGbvl0ielsTHDF+ckkcCVbe7hFnHDvLc11T02K/mugqJTtb56p7GfrYyBIWDsOJTWr/wvHbDOufU9ELASPAHkbJjsEwc0nMcPjjG29C5dRKQRL0buXgqrSgE0Th289OHIc2eCjp1FGT+6kVnw6c1nK4J1QefaNBOAw30+8RNGlunKW5Bn2PRRwO2QylfswQDOr1+gaKimVMTgHfilqI4rL++VbA/BGwXDQE0KnF/0KwVEt0zXdFkKXIOaROk4UTQBhJGORl8MDAw+bk8prBPj0/dl9hTNLebuuvsnqOJFmYnBM+xZTP1cLEqPKqV+FCI72E+XiVn1dkse1Ouc4ti2aXjx3GC6XWpHlocve7uNY+6xRxSZxOxRPwcVdFSRiJGNeZ90RmnTnnR+uc1eWY/yAeVUxZzwMqugvOdbMM9RrJZb/gm2O4/4Z/Mhd4wXTGrg6MCZUHh+Y7MKVKThALR5n0uTiYkwuSqCvEWYlTfcWkmsDZB9QgjTE8VFKeMTnF8GkiYT16fyj435WvUs10hlBF3hpLY1RWE09sWfTudzSYrrETMZy9irFE4D1GnO1l2hLymEZXGx96zW8i7XNLJTcTELB+NYYWpz8mgDrUUro7o2MhrUO98WyQ+V7pI=
+  - secure: PlwF/ysNA1znLPk7h64WBl/M38M8VHx8a63Sixt/Fz40l5AAssnOnebrpKTxVvp6TYnwUzNEniIf0st6b+1P5O2mzfi6y35TYOLLfbGmNHMsnKGcjufLmy9tTIPnvBc835K6nMvp4pDh0DyhF7IazhAr9cEq5rnWPyLAZSj/duCbYcy+oIseWESTardtXCi5GFCarEjVaKHLCHCuFf9FDL90I8xsWpGUNaJMu0eVJzny7cM4tbCsM0v1xgVrwRXlACJlYj7PUhinrFTa5+N0QR2z2YWpI29sKW1hj3adpBU8u9tQM8vYAeiLh8i4AoIso20Nsmt8oa2SaNoUbwYfEmM4dhAhbvcD4M3MMt2Yc6Nfa7dbnQJpD8vuIi8ggxXXXnBoPHbopuHd0aBrf4NdfQ9OiJAIDqeBAqfg4JZfTJXMMSiCmu4BLJVbW0nSU+KThcqFi3CBaeic5g/a852o5coedwYHlPleN+19Q4QRpEjE2sC+aKjpJdQUdaja4Oa7GvznMdGnXfqsplCGCUnxWBTdJnhf04JG/Jqd82y11Avy6vbcCWfT2rRi56JRj3y+j2XUFC5x2dQpBdwYY9NbGyEqRfSqUl5aBYDyPSyAK+5JcQkzzch3ZP2Cetn6Bpjda/zR5Hrp3qBvlasqkWQAsbmNJalFLANe/uK5HXxc+10=
