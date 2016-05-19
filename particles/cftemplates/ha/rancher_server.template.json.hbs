@@ -12,13 +12,13 @@ LBPortMappings:
   {{!-- Infra Params --}}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="VpcId"
     type="AWS::EC2::VPC::Id"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="SubnetIds"
     type="List<AWS::EC2::Subnet::Id>"
   }}
@@ -26,40 +26,40 @@ LBPortMappings:
 
   {{!-- MySQL Resources --}}
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="MySQLUser"
     type="String"
     default="condensation"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="MySQLPassword"
     noEcho=true
     type="String"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="MySQLHost"
     type="String"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="MySQLPort"
     type="Number"
     default=3306
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="MySQLName"
     type="String"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="MySQLSecurityGroupId"
     type="AWS::EC2::SecurityGroup::Id"
   }}
@@ -79,20 +79,20 @@ LBPortMappings:
   {{!-- Redis Resources --}}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="RedisHost"
     type="String"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="RedisPort"
     type="Number"
     default=6379
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="RedisSecurityGroupId"
     type="AWS::EC2::SecurityGroup::Id"
   }}
@@ -111,46 +111,46 @@ LBPortMappings:
   {{!-- App Resources --}}
 
   {{!
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="IamInstanceProfile"
     type="String"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="ExhibitorUrl"
     type="String"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="ZookeeperClientSecurityGroup"
     type="AWS::EC2::SecurityGroup::Id"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="AppInstanceType"
     type="String"
     default="t2.medium"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="AppDockerImage"
     type="String"
     default="rancher/server:latest"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="AppClusterSize"
     type="String"
     default="3"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="KeyName"
     type="String"
   }}
@@ -286,31 +286,28 @@ LBPortMappings:
           },
           "commands": {
             "001": {
-              "command": { "Fn::Join" : ["", [
-                "/usr/bin/docker run -d ",
-                "   --restart=on-failure",
-                "   -p 8080:8080",
-                "   -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
-                "   -e 'CATTLE_HOST_API_PROXY_MODE=ha'",
-                "   -e 'DEFAULT_CATTLE_MACHINE_EXECUTE=false'",
-                "   -e CATTLE_ZOOKEEPER_CONNECTION_STRING=`/usr/local/bin/zk-list-nodes`",
-                "   -e 'CATTLE_HOST_API_PROXY_HOST=", {"Fn::GetAtt": ["WsLoadBalancer", "DNSName"]}, "'",
-                "   -e 'CATTLE_DB_CATTLE_MYSQL_NAME=", {"Ref": "MySQLName" }, "'",
-                "   -e 'CATTLE_DB_CATTLE_USERNAME=", {"Ref": "MySQLUser" }, "'",
-                "   -e 'CATTLE_DB_CATTLE_PASSWORD=", {"Ref": "MySQLPassword" }, "'",
-                "   -e 'CATTLE_DB_CATTLE_MYSQL_HOST=", {"Ref": "MySQLHost" }, "'",
-                "   -e 'CATTLE_DB_CATTLE_MYSQL_PORT=", {"Ref": "MySQLPort" }, "'",
-                "   -e 'CATTLE_REDIS_HOSTS=", {"Ref": "RedisHost" }, "'",
-                "   -e 'CATTLE_REDIS_PORT=", {"Ref": "RedisPort" }, "'",
-                "   ", { "Ref": "AppDockerImage" }
-              ]]}
+              "command": {{
+                partial "rancher_server_command"
+                cattleHostApiProxyMode="ha"
+                defaultCattleMachineExecute=false
+                cattleZookeeperConnectionString="`/usr/local/bin/zk-list-nodes`"
+                cattleHostApiProxyHost='{"Fn::GetAtt": ["WsLoadBalancer", "DNSName"]}'
+                cattleDbCattleMysqlName=(ref "MySQLName")
+                cattleDbCattleUsername=(ref "MySQLUser")
+                cattleDbCattlePassword=(ref "MySQLPassword")
+                cattleDbCattleMysqlHost=(ref "MySQLHost")
+                cattleDbCattleMysqlPort=(ref "MySQLPort")
+                cattleRedisHosts=(ref "RedisHost")
+                cattleRedisPort=(ref "RedisPort")
+                rancherServerImage=(ref "AppDockerImage")
+              }}
             }
           }
         }
       }
     },
     "Properties": {
-      "ImageId": "{{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}}",
+      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2016.03.0.x86_64-gp2' }}",
       {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
       "KeyName": {
         "Fn::If" : [
@@ -323,31 +320,11 @@ LBPortMappings:
       "AssociatePublicIpAddress": "true",
       "InstanceType": {"Ref": "AppInstanceType" },
       "BlockDeviceMappings": [ { "DeviceName": "/dev/xvda", "Ebs": { "VolumeSize": "8" } } ],
-      "UserData": { "Fn::Base64": { "Fn::Join": ["", [
-        "#!/bin/bash -ex\n",
-
-        "# Helper function\n",
-        "function error_exit\n",
-        "{\n",
-        "  /opt/aws/bin/cfn-signal -e 1 -r \"$1\" ",
-        "  --stack ", { "Ref": "AWS::StackName" },
-        "  --resource AppInstanceGroup " ,
-        "  --region ", { "Ref" : "AWS::Region" }, "\n",
-        "  exit 1\n",
-        "}\n",
-
-        "# Process CloudFormation init definitions\n",
-        "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r LaunchConfig ", " -c default ",
-        "    --region ", { "Ref": "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
-
-        "# All is well so signal success\n",
-        "/opt/aws/bin/cfn-signal -e 0 -r \"Stack setup complete\" ",
-        "  --stack ", {"Ref": "AWS::StackName"},
-        "  --resource AppInstanceGroup " ,
-        "  --region ", {"Ref": "AWS::Region"}, "\n",
-
-        "#EOF"
-      ]]}}
+      "UserData": {{
+        partial "user_data"
+        metadataResource="LaunchConfig"
+        notifyResource="AppInstanceGroup"
+      }}
     }
   {{/resource}}
 
@@ -439,7 +416,7 @@ LBPortMappings:
       }
     },
     "Properties": {
-      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}",
+      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2016.03.0.x86_64-gp2' }}",
       {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
       "KeyName": {
         "Fn::If" : [

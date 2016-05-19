@@ -20,18 +20,16 @@ subnets:
 
   {{! VPC }}
   {{
-    set "module:particles-vpc" "simple/vpc"
-    vpcLogicalId="Vpc"
+    set "m:vpc" "simple/vpc"
     cidrDefault=vpc.cidr
-    createVpcSecurityGroup=vpc.createVpcSecurityGroup
-    createInternetGateway=vpc.createInternetGateway
-    openVpcCommunication=vpc.openVpcCommunication
   }}
+
+{{!--
 
   {{! Subnets }}
   {{#each subnets}}
     {{
-      set "module:particles-vpc" "simple/subnet"
+      set "m:vpc" "simple/subnet"
       subnetLogicalId=this.name
       defaultCidr=this.defaultCidr
       vpcId='{"Ref": "Vpc"}'
@@ -40,9 +38,9 @@ subnets:
     }}
   {{/each}}
 
-  {{#output "module:particles-common-core" "base" logicalId="SubnetList"}}
+  {{#output "m:core" "base" logicalId="SubnetList"}}
     "Value": {"Fn::Join": [",", [{{#each subnets}}{{#if @index}},{{/if}}{"Ref": "{{this.name}}"}{{/each}}]]}
   {{/output}}
 
-
+  --}}
 {{/layout}}
