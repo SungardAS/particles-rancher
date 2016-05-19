@@ -307,7 +307,7 @@ LBPortMappings:
       }
     },
     "Properties": {
-      "ImageId": "{{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}}",
+      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2016.03.0.x86_64-gp2' }}",
       {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
       "KeyName": {
         "Fn::If" : [
@@ -416,7 +416,7 @@ LBPortMappings:
       }
     },
     "Properties": {
-      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2015.03.0.x86_64-ebs' }}",
+      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2016.03.0.x86_64-gp2' }}",
       {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
       "KeyName": {
         "Fn::If" : [
