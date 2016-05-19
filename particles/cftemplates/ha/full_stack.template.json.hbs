@@ -1,7 +1,7 @@
 {{#layout}}
 
   {{! Network}}
-  {{#resource "module:particles-common-core" "base" logicalId="NetworkInfrastructure" type="AWS::CloudFormation::Stack"}}
+  {{#resource "m:core" "base" logicalId="NetworkInfrastructure" type="AWS::CloudFormation::Stack"}}
     "Properties": {
       "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
       "TemplateURL": "{{templateS3Url "ha/network_infrastructure.template.json"}}"
@@ -10,11 +10,11 @@
 
 
   {{! Zookeepr Exhibitor}}
-  {{parameter "module:particles-common-core" "base" logicalId="ZookeeperKeyName" type="AWS::EC2::KeyPair::KeyName"}}
+  {{parameter "m:core" "base" logicalId="ZookeeperKeyName" type="AWS::EC2::KeyPair::KeyName"}}
 
-  {{resource "module:particles-common-core" "base" logicalId="ExhibitorS3Bucket" type="AWS::S3::Bucket"}}
+  {{resource "m:core" "base" logicalId="ExhibitorS3Bucket" type="AWS::S3::Bucket"}}
 
-  {{#resource "module:particles-common-core" "base"
+  {{#resource "m:core" "base"
     logicalId="ExhibitorAdminSecurityGroup"
     type="AWS::EC2::SecurityGroup"
   }}
@@ -24,7 +24,7 @@
     }
   {{/resource}}
 
-  {{#resource "module:particles-common-core" "base" logicalId="Zookeeper" type="AWS::CloudFormation::Stack"}}
+  {{#resource "m:core" "base" logicalId="Zookeeper" type="AWS::CloudFormation::Stack"}}
     "Properties": {
       "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
       "TemplateURL": "{{templateS3Url "zookeeper/zookeeper.json"}}",
@@ -42,20 +42,20 @@
 
   {{! RDS }}
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="DbSnapshotIdentifier"
     type="String"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="DbMasterUsername"
     type="String"
     default="condensation"
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="DbMasterUserPassword"
     type="String"
     noEcho=true
@@ -64,7 +64,7 @@
   }}
 
   {{
-    parameter "module:particles-common-core" "base"
+    parameter "m:core" "base"
     logicalId="DbName"
     type="String"
     default="condensation"
@@ -72,7 +72,7 @@
   }}
 
   {{! set "module:particles-rds" "mysql/params_multi_az" logicalIdPrefix="DDDDB"}}
-  {{#resource "module:particles-common-core" "base" logicalId="RDS" type="AWS::CloudFormation::Stack"}}
+  {{#resource "m:core" "base" logicalId="RDS" type="AWS::CloudFormation::Stack"}}
     "Properties": {
       "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
       "TemplateURL": "{{templateS3Url "module:particles-rds" "mysql/multi_az.template.json"}}",
@@ -87,7 +87,7 @@
   {{/resource}}
 
   {{! ElastiCache }}
-  {{#resource "module:particles-common-core" "base" logicalId="Redis" type="AWS::CloudFormation::Stack"}}
+  {{#resource "m:core" "base" logicalId="Redis" type="AWS::CloudFormation::Stack"}}
     "Properties": {
       "NotificationARNs": {"Ref" : "AWS::NotificationARNs"},
       "TemplateURL": "{{templateS3Url "module:particles-elasticache" "redis/multi_az.template.json"}}",
