@@ -1,6 +1,6 @@
 {
   "name": "particles-rancher",
-  "version": "0.0.1-beta.0",
+  "version": "0.1.0-beta.1",
   "publishConfig": {
     "tag": "beta"
   },
@@ -8,6 +8,7 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha",
     "build": "./node_modules/.bin/gulp condensation:build",
+    "clean": "./node_modules/.bin/gulp condensation:clean",
     "deploy": "./node_modules/.bin/gulp condensation:deploy",
     "gulp": "./node_modules/.bin/gulp"
   },
@@ -43,11 +44,11 @@
     "particles-core": "^0.4.3",
     "particles-ec2": "^0.2.11",
     "particles-elasticache": "github:sungardas/particles-elasticache",
-    "particles-rds": "0.1.0-beta.0",
-    "particles-vpc": "^0.4.2"
+    "particles-rds": "^0.1.0-beta.0",
+    "particles-vpc": "^0.5.0-rc8"
   },
   "devDependencies": {
-    "condensation-particle-tests": "^0.5.1",
+    "condensation-particle-tests": "^0.5.2",
     "mocha": "^2.4.5"
   }
 }
