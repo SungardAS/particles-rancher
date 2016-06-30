@@ -21,7 +21,7 @@
       3306,
 
       "  ",
-      "rancher/server"
+      "rancher/server:stable"
     ]
   ]
 }

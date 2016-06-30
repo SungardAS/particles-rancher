@@ -10,7 +10,7 @@
       {"Ref": "AWS::Region"},
       "'",
       "  ",
-      "rancher/server"
+      "rancher/server:stable"
     ]
   ]
 }
