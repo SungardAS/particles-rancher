@@ -1,8 +1,11 @@
-{{#resource "m:core" "base" type="AWS::ElasticLoadBalancing::LoadBalancer"}}
+{{#resource "m:ec2" "load_balancer"}}
   "Properties": {
     "CrossZone": true,
     "SecurityGroups": {{helper "m:core" "propertyValue" securityGroups}},
     "Subnets": {{helper "m:core" "propertyValue" subnets}},
+    "ConnectionSettings": {
+      "IdleTimeout": 3600
+    },
     "Listeners": [
       {
         "LoadBalancerPort": "80",
@@ -24,7 +27,7 @@
       "Interval": "10",
       "Timeout": "5",
       "UnhealthyThreshold": "2",
-      "Target": "TCP:8080"
+      "Target": "HTTP:8080/ping"
     }
   }
 {{/resource}}
