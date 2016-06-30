@@ -227,15 +227,6 @@ LBPortMappings:
     }
   {{/resource}}
 
-  {{#resource "ha/load_balancer" logicalId="WsLoadBalancerInternal"}}
-    "Properties": {
-      "SecurityGroups": [ {"Ref": "LBSecurityGroup"} ],
-      "Subnets": {"Ref": "SubnetIds"},
-      "Scheme": "internal"
-    }
-  {{/resource}}
-
-
   {{#resource logicalId="LaunchConfig"}}
     "Type" : "AWS::AutoScaling::LaunchConfiguration",
     "Metadata" : {
@@ -307,7 +298,7 @@ LBPortMappings:
       }
     },
     "Properties": {
-      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2016.03.0.x86_64-gp2' }}",
+      "ImageId": "{{helper "m:amazon-ami" "region-ami" "amzn-ami-hvm-2016.03.0.x86_64-gp2" }}",
       {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
       "KeyName": {
         "Fn::If" : [
@@ -416,7 +407,7 @@ LBPortMappings:
       }
     },
     "Properties": {
-      "ImageId": "{{helper 'module:particles-ec2' 'amazon-region-ami' 'amzn-ami-hvm-2016.03.0.x86_64-gp2' }}",
+      "ImageId": "{{helper "m:amazon-ami" "region-ami" "amzn-ami-hvm-2016.03.0.x86_64-gp2" }}",
       {{!"IamInstanceProfile": {"Ref": "IamInstanceProfile"},}}
       "KeyName": {
         "Fn::If" : [
@@ -429,31 +420,11 @@ LBPortMappings:
       "AssociatePublicIpAddress": "true",
       "InstanceType": {"Ref": "AppInstanceType" },
       "BlockDeviceMappings": [ { "DeviceName": "/dev/xvda", "Ebs": { "VolumeSize": "8" } } ],
-      "UserData": { "Fn::Base64": { "Fn::Join": ["", [
-        "#!/bin/bash -ex\n",
-
-        "# Helper function\n",
-        "function error_exit\n",
-        "{\n",
-        "  /opt/aws/bin/cfn-signal -e 1 -r \"$1\" ",
-        "  --stack ", { "Ref": "AWS::StackName" },
-        "  --resource AppInstanceGroup " ,
-        "  --region ", { "Ref" : "AWS::Region" }, "\n",
-        "  exit 1\n",
-        "}\n",
-
-        "# Process CloudFormation init definitions\n",
-        "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WsLaunchConfig ", " -c default ",
-        "    --region ", { "Ref": "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
-
-        "# All is well so signal success\n",
-        "/opt/aws/bin/cfn-signal -e 0 -r \"Stack setup complete\" ",
-        "  --stack ", {"Ref": "AWS::StackName"},
-        "  --resource WsInstanceGroup " ,
-        "  --region ", {"Ref": "AWS::Region"}, "\n",
-
-        "#EOF"
-      ]]}}
+      "UserData": {{
+        partial "user_data"
+        metadataResource="WsLaunchConfig"
+        notifyResource="WsInstanceGroup"
+      }}
     }
   {{/resource}}
 
@@ -484,7 +455,7 @@ LBPortMappings:
         "WaitOnResourceSignals": true
       }
     },
-    "DependsOn": ["WsLoadBalancer","WsLoadBalancerInternal"]
+    "DependsOn": ["WsLoadBalancer"]
   {{/resource}}
 
   {{#resource logicalId="WsInstanceGroup"}}
@@ -495,7 +466,7 @@ LBPortMappings:
       "MinSize" : "1",
       "MaxSize" : "1",
       "DesiredCapacity": 1,
-      "LoadBalancerNames": [ {"Ref": "WsLoadBalancer" },{"Ref": "WsLoadBalancerInternal" } ],
+      "LoadBalancerNames": [ {"Ref": "WsLoadBalancer" }],
       "VPCZoneIdentifier": { "Ref" : "SubnetIds" },
       "HealthCheckGracePeriod": 90
     },
