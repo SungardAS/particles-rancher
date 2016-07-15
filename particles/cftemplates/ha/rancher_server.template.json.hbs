@@ -312,7 +312,7 @@ LBPortMappings:
       "InstanceType": {"Ref": "AppInstanceType" },
       "BlockDeviceMappings": [ { "DeviceName": "/dev/xvda", "Ebs": { "VolumeSize": "8" } } ],
       "UserData": {{
-        partial "user_data"
+        partial "userdata/rancheros"
         metadataResource="LaunchConfig"
         notifyResource="AppInstanceGroup"
       }}
@@ -421,7 +421,7 @@ LBPortMappings:
       "InstanceType": {"Ref": "AppInstanceType" },
       "BlockDeviceMappings": [ { "DeviceName": "/dev/xvda", "Ebs": { "VolumeSize": "8" } } ],
       "UserData": {{
-        partial "user_data"
+        partial "userdata/rancheros"
         metadataResource="WsLaunchConfig"
         notifyResource="WsInstanceGroup"
       }}
