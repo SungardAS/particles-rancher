@@ -22,32 +22,42 @@ was deployed with.
 
 ## Build
 
-1. update the zookeeper submodule
-2. build:
-
     > npm run build
 
-## Created Resources for HA deployment
-* [Zookeeper-Exhibitor](https://github.com/mbabineau/cloudformation-zookeeper)
-* Network infrastructure with [particles-vpc](https://github.com/sungardas/particles-vpc)
-* Multi-AZ RDS with [particles-rds](https://github.com/sungardas/particles-rds)
-* Multi-AZ Redis with [particles-elasticache](https://github.com/sungardas/particles-elasticache)
-* Autoscaling Group for rancher-server
-* Rancher websocket and go-machine instance
-* ELB with TCP port forwarding
-* Necessary security groups
+## Ready To Launch
 
-## Packaged Project
+Ready to Launch community available templates created from condensation particles
 
-Using condensation the built CloudFormation Templates for Rancher
-have been deployed to the following S3 locations.
-
-Defaults can be accepted for all but `ZookeeperKeyName`.  You must provide an existing SSH Key Pair Name for this parameter.
+### Single Instance
 
 |region|Stack|
 |------|------------|---------|
-|us-east-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=rancher-ha&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/ha/full_stack.template.json)|
-|us-west-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=rancher-ha&templateURL=https://s3.amazonaws.com/condensation-particles.us-west-2/particles-rancher/master/particles/cftemplates/ha/full_stack.template.json)|
+|us-east-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-rancher&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/instance)|
+|us-west-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=particles-rancher&templateURL=https://s3-us-west-1.amazonaws.com/condensation-particles.us-west-1/particles-rancher/master/particles/cftemplates/host/instance)|
+|us-west-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=particles-rancher&templateURL=https://s3-us-west-2.amazonaws.com/condensation-particles.us-west-2/particles-rancher/master/particles/cftemplates/host/instance)|
+|eu-west-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=particles-rancher&templateURL=https://s3-eu-west-1.amazonaws.com/condensation-particles.eu-west-1/particles-rancher/master/particles/cftemplates/host/instance)|
+|eu-central-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=particles-rancher&templateURL=https://s3-eu-central-1.amazonaws.com/condensation-particles.eu-central-1/particles-rancher/master/particles/cftemplates/host/instance)|
+|ap-northeast-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/new?stackName=particles-rancher&templateURL=https://s3-ap-northeast-1.amazonaws.com/condensation-particles.ap-northeast-1/particles-rancher/master/particles/cftemplates/host/instance)|
+|ap-northeast-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/new?stackName=particles-rancher&templateURL=https://s3-ap-northeast-2.amazonaws.com/condensation-particles.ap-northeast-2/particles-rancher/master/particles/cftemplates/host/instance)|
+|ap-southeast-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=particles-rancher&templateURL=https://s3-ap-southeast-1.amazonaws.com/condensation-particles.ap-southeast-1/particles-rancher/master/particles/cftemplates/host/instance)|
+|ap-southeast-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/new?stackName=particles-rancher&templateURL=https://s3-ap-southeast-2.amazonaws.com/condensation-particles.ap-southeast-2/particles-rancher/master/particles/cftemplates/host/instance)|
+|sa-east-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=sa-east-1#/stacks/new?stackName=particles-rancher&templateURL=https://s3-sa-east-1.amazonaws.com/condensation-particles.sa-east-1/particles-rancher/master/particles/cftemplates/host/instance)|
+
+
+### Autoscaling Group
+
+|region|Stack|
+|------|------------|---------|
+|us-east-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-subnet&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|us-west-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=particles-subnet&templateURL=https://s3-us-west-1.amazonaws.com/condensation-particles.us-west-1/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|us-west-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=particles-subnet&templateURL=https://s3-us-west-2.amazonaws.com/condensation-particles.us-west-2/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|eu-west-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=particles-subnet&templateURL=https://s3-eu-west-1.amazonaws.com/condensation-particles.eu-west-1/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|eu-central-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=particles-subnet&templateURL=https://s3-eu-central-1.amazonaws.com/condensation-particles.eu-central-1/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|ap-northeast-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/new?stackName=particles-subnet&templateURL=https://s3-ap-northeast-1.amazonaws.com/condensation-particles.ap-northeast-1/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|ap-northeast-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/new?stackName=particles-subnet&templateURL=https://s3-ap-northeast-2.amazonaws.com/condensation-particles.ap-northeast-2/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|ap-southeast-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=particles-subnet&templateURL=https://s3-ap-southeast-1.amazonaws.com/condensation-particles.ap-southeast-1/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|ap-southeast-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/new?stackName=particles-subnet&templateURL=https://s3-ap-southeast-2.amazonaws.com/condensation-particles.ap-southeast-2/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
+|sa-east-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=sa-east-1#/stacks/new?stackName=particles-subnet&templateURL=https://s3-sa-east-1.amazonaws.com/condensation-particles.sa-east-1/particles-rancher/master/particles/cftemplates/host/scaling_group.template.json)|
 
 
 ## Sungard Availability Services | Labs
