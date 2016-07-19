@@ -1,7 +1,8 @@
 {
   "Fn::Join" : [ "",
     [
-      "/usr/bin/docker run -d ",
+      "docker",
+      " run -d ",
       "  --restart=on-failure",
       "  -p ",
       8080,

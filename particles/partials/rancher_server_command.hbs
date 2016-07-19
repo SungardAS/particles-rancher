@@ -3,9 +3,10 @@ cattleHostApiProxyMode: false
 defaultCattlemachineExecute: true
 rancherServerImage: rancher/server:stable
 hostPort: 8080
+dockerCmd: docker
 ---
 { "Fn::Join" : ["", [
-  "/usr/bin/docker run -d ",
+  {{helper "m:core" "propertyValue" dockerCmd}}," run -d ",
   "  --restart=on-failure",
   "  -p ", {{helper "m:core" "propertyValue" hostPort}}, ":8080",
   "  -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
