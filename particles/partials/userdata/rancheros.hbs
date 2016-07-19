@@ -10,7 +10,7 @@ dockerVersion: 1.11
   "    kernel-headers: true\n",
   "  services:\n",
   "    aws-cfn-bootstrap:\n",
-  "      image: sungardas/aws-cfn-bootstrap:{{helper "m:core" "propertyValue" dockerVersion}}","\n",
+  "      image: sungardas/aws-cfn-bootstrap:",{{helper "m:core" "propertyValue" dockerVersion}},"\n",
   "      volumes:\n",
   "        - /var/run/docker.sock:/var/run/docker.sock\n",
   "      environment:\n",
