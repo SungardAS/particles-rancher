@@ -5,6 +5,7 @@ stackName: '{"Ref": "AWS::StackName"}'
 { "Fn::Base64": { "Fn::Join": ["", [
   "#cloud-config\n",
   "rancher:\n",
+  "  resize_device: /dev/xvda1\n",
   "  services_include:\n",
   "    kernel-headers: true\n",
   "  services:\n",
