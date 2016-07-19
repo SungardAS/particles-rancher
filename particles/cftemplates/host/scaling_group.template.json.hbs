@@ -1,0 +1,50 @@
+{{#layout}}
+
+  {{parameter "m:core" "base" logicalId="SubnetIds" type="List<AWS::EC2::Subnet::Id>" description="Subnet for the ec2 instance"}}
+  {{parameter "m:core" "base" logicalId="InstanceType" type="String" description="ec2 Instance Type"}}
+  {{parameter "m:vpc" "security_group/id_list" logicalId="SecurityGroupIds"}}
+  {{parameter "m:ec2" "key_pair/key_name" logicalId="KeyPairName"}}
+  {{parameter "m:core" "base" logicalId="DesiredCapacity" type="Number"}}
+  {{parameter "m:core" "base" logicalId="MaxSize" type="Number"}}
+  {{parameter "m:core" "base" logicalId="MinSize" type="Number"}}
+
+  {{!-- Rancher --}}
+  {{parameter "m:core" "base" type="String" logicalId="RancherAgentImage"}}
+  {{parameter "m:core" "base" type="String" logicalId="RancherRegistrationUrl" description="Rancher registration URL"}}
+
+  {{!-- Compute --}}
+  {{parameter "m:core" "base" type="Number" logicalId="VolumeSize" default=8}}
+
+  {{mapping "rancheros_ami" logicalId="RancherAmiMap"}}
+
+  {{
+    resource "host/launch_configuration"
+    logicalId="LaunchConfiguration"
+    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "045"]}'
+    instanceType=(ref "InstanceType")
+    keyName=(ref "KeyPairName")
+    rancherAgentImage=(ref "RancherAgentImage")
+    rancherRegistrationUrl=(ref "RancherRegistrationUrl")
+    securityGroups=(ref "SecurityGroupIds")
+    userData=(
+      partial "userdata/rancheros"
+      dockerVersion="1.10"
+      metadataResource="Instance"
+      notifyResource="Instance"
+    )
+    volumeSize=(ref "VolumeSize")
+  }}
+
+  {{
+    resource "host/autoscale_group"
+    logicalId="AutoScaleGroup"
+    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "045"]}'
+    launchConfigurationName=(ref "LaunchConfiguration")
+    desiredCapacity=(ref "DesiredCapacity")
+    maxSize=(ref "MaxSize")
+    minSize=(ref "MinSize")
+    vpcZoneIdentifier=(ref "SubnetIds")
+  }}
+
+{{/layout}}
+

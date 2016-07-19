@@ -1,0 +1,9 @@
+{{#resource "m:core" "base" type="AWS::AutoScaling::AutoScalingGroup"}}
+  {{#helper "m:core" "properties"}}
+    {{helper "m:core" "property" "DesiredCapacity"}}
+    {{helper "m:core" "property" "LaunchConfigurationName"}}
+    {{helper "m:core" "property" "MaxSize"}}
+    {{helper "m:core" "property" "MinSize"}}
+    {{helper "m:core" "property" "VPCZoneIdentifier" valueVariable="vpcZoneIdentifier"}}
+  {{/helper}}
+{{/resource}}
