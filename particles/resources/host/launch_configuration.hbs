@@ -1,9 +1,5 @@
-{{#resource "m:core" "base" type="AWS::AutoScaling::LaunchConfiguration"}}
-  {{#helper "m:core" "properties"}}
-    {{helper "m:core" "property" "ImageId"}}
-    {{helper "m:core" "property" "InstanceType"}}
-    {{helper "m:core" "property" "KeyName"}}
-    {{helper "m:core" "property" "SecurityGroups"}}
-    {{helper "m:core" "property" "UserData"}}
-  {{/helper}}
+{{#resource "launch_configuration"}}
+"Metadata": {
+  "AWS::CloudFormation::Init": {{partial "host/cf_init"}}
+}
 {{/resource}}
