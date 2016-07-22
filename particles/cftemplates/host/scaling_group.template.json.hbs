@@ -20,7 +20,7 @@
   {{
     resource "host/launch_configuration"
     logicalId="LaunchConfiguration"
-    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "045"]}'
+    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "050"]}'
     instanceType=(ref "InstanceType")
     keyName=(ref "KeyPairName")
     rancherAgentImage=(ref "RancherAgentImage")
@@ -28,7 +28,7 @@
     securityGroups=(ref "SecurityGroupIds")
     userData=(
       partial "userdata/rancheros"
-      dockerVersion="1.10"
+      dockerVersion="1.11"
       metadataResource="LaunchConfiguration"
       notifyResource="LaunchConfiguration"
     )
@@ -38,7 +38,6 @@
   {{
     resource "host/autoscale_group"
     logicalId="AutoScaleGroup"
-    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "045"]}'
     launchConfigurationName=(ref "LaunchConfiguration")
     desiredCapacity=(ref "DesiredCapacity")
     maxSize=(ref "MaxSize")
