@@ -6,8 +6,11 @@ dockerVersion: 1.11
 { "Fn::Base64": { "Fn::Join": ["", [
   "#cloud-config\n",
   "rancher:\n",
+  "  environment:\n",
+  "    RESIZE_DEV: /dev/xvda\n",
   "  services_include:\n",
   "    kernel-headers: true\n",
+  "    https://raw.githubusercontent.com/rancher/os-services/v0.4.5/r/resize-fs.yml: true\n",
   "  services:\n",
   "    aws-cfn-bootstrap:\n",
   "      image: sungardas/aws-cfn-bootstrap:",{{helper "m:core" "propertyValue" dockerVersion}},"\n",

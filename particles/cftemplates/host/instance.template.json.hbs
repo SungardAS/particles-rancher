@@ -16,7 +16,7 @@
   {{
     resource "host/rancheros_instance"
     logicalId="Instance"
-    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "045"]}'
+    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "050"]}'
     instanceType=(ref "InstanceType")
     keyName=(ref "KeyPairName")
     rancherAgentImage=(ref "RancherAgentImage")
@@ -25,7 +25,7 @@
     subnetId=(ref "SubnetId")
     userData=(
       partial "userdata/rancheros"
-      dockerVersion="1.10"
+      dockerVersion="1.11"
       metadataResource="Instance"
       notifyResource="Instance"
     )
