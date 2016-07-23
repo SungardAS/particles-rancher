@@ -21,6 +21,7 @@ dockerVersion: 1.11
   "        CFN_NOTIFY_RESOURCE: ", {{helper "m:core" "propertyValue" notifyResource}},"\n",
   "        CFN_CONFIG_SETS: ", {{helper "m:core" "propertyValue" configSets}},"\n",
   "        CFN_STACK_NAME: ", {{helper "m:core" "propertyValue" stackName}},"\n",
+  "        AWS_REGION: ",{"Ref": "AWS::Region"},"\n",
   "        AWS_DEFAULT_REGION: ",{"Ref": "AWS::Region"},"\n"
 ]]}}
 

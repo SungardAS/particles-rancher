@@ -32,6 +32,11 @@
           "Ref": "AWS::StackName"
         },
         "\n",
+        "        AWS_REGION: ",
+        {
+          "Ref": "AWS::Region"
+        },
+        "\n",
         "        AWS_DEFAULT_REGION: ",
         {
           "Ref": "AWS::Region"

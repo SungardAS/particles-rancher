@@ -1,22 +1,16 @@
 {{#layout}}
 
   {{parameter "m:core" "base" logicalId="SubnetId" type="AWS::EC2::Subnet::Id" description="Subnet for the ec2 instance"}}
-  {{parameter "m:core" "base" logicalId="InstanceType" type="String" description="ec2 Instance Type"}}
-  {{parameter "m:vpc" "security_group/id_list" logicalId="SecurityGroupIds"}}
-  {{parameter "m:ec2" "key_pair/key_name" logicalId="KeyPairName"}}
+  {{set "host/parameters_rancheros"}}
 
-  {{!-- Rancher --}}
-  {{parameter "m:core" "base" type="String" logicalId="RancherAgentImage"}}
-  {{parameter "m:core" "base" type="String" logicalId="RancherRegistrationUrl" description="Rancher registration URL"}}
-
-  {{!-- Compute --}}
-  {{parameter "m:core" "base" type="Number" logicalId="VolumeSize" default=8}}
 
   {{mapping "rancheros_ami" logicalId="RancherAmiMap"}}
+  {{mapping "rancheros_versions" logicalId="RancherVersionAmiMap"}}
+
   {{
     resource "host/rancheros_instance"
     logicalId="Instance"
-    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, "050"]}'
+    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]} ]}'
     instanceType=(ref "InstanceType")
     keyName=(ref "KeyPairName")
     rancherAgentImage=(ref "RancherAgentImage")
@@ -25,7 +19,7 @@
     subnetId=(ref "SubnetId")
     userData=(
       partial "userdata/rancheros"
-      dockerVersion="1.11"
+      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]}'
       metadataResource="Instance"
       notifyResource="Instance"
     )
