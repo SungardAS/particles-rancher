@@ -20,7 +20,7 @@
     securityGroups=(ref "SecurityGroupIds")
     userData=(
       partial "userdata/rancheros"
-      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]}'
+      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "dockerVersion"]}'
       metadataResource="LaunchConfiguration"
       notifyResource="LaunchConfiguration"
     )

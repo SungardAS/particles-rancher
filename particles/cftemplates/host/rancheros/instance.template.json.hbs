@@ -19,7 +19,7 @@
     subnetId=(ref "SubnetId")
     userData=(
       partial "userdata/rancheros"
-      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]}'
+      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "dockerVersion"]}'
       metadataResource="Instance"
       notifyResource="Instance"
     )
