@@ -7,18 +7,19 @@ stackName: '{"Ref": "AWS::StackName"}'
   "repo_update: true\n",
   "repo_upgrade: all\n",
   "packages:\n",
-  " - docker\n",
-  "runcmd:\n",
-  " - service docker start\n",
-  " -\n",
   "  - docker\n",
-  "  - -run\n",
-  "  - -e CFN_METADATA_RESOURCE=", {{helper "m:core" "propertyValue" metadataResource}},"\n",
-  "  - -e CFN_NOTIFY_RESOURCE=", {{helper "m:core" "propertyValue" notifyResource}},"\n",
-  "  - -e CFN_CONFIG_SETS=", {{helper "m:core" "propertyValue" configSets}},"\n",
-  "  - -e CFN_STACK_NAME=", {{helper "m:core" "propertyValue" stackName}},"\n",
-  "  - -e AWS_DEFAULT_REGION=",{"Ref": "AWS::Region"},"\n"
-  "  - -v\n"
-  "  - /var/run/docker.sock:/var/run/docker.sock\n",
-  "  - sungardas/aws-cfn-bootstrap\n"
+  "runcmd:\n",
+  "  - service docker start\n",
+  "  -\n",
+  "    - docker\n",
+  "    - -run\n",
+  "    - -e CFN_METADATA_RESOURCE=", {{helper "m:core" "propertyValue" metadataResource}},"\n",
+  "    - -e CFN_NOTIFY_RESOURCE=", {{helper "m:core" "propertyValue" notifyResource}},"\n",
+  "    - -e CFN_CONFIG_SETS=", {{helper "m:core" "propertyValue" configSets}},"\n",
+  "    - -e CFN_STACK_NAME=", {{helper "m:core" "propertyValue" stackName}},"\n",
+  "    - -e AWS_DEFAULT_REGION=",{"Ref": "AWS::Region"},"\n",
+  "    - -e AWS_REGION=",{"Ref": "AWS::Region"},"\n",
+  "    - -v\n",
+  "    - /var/run/docker.sock:/var/run/docker.sock\n",
+  "    - sungardas/aws-cfn-bootstrap\n"
 ]]}}
