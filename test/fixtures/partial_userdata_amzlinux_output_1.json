@@ -13,37 +13,37 @@
         "  -\n",
         "    - docker\n",
         "    - run\n",
-        "    - -e",
+        "    - -e\n",
         "    - CFN_METADATA_RESOURCE=",
         "",
         "\n",
-        "    - -e",
+        "    - -e\n",
         "    - CFN_NOTIFY_RESOURCE=",
         "",
         "\n",
-        "    - -e",
+        "    - -e\n",
         "    - CFN_CONFIG_SETS=",
         "default",
         "\n",
-        "    - -e",
+        "    - -e\n",
         "    - CFN_STACK_NAME=",
         {
           "Ref": "AWS::StackName"
         },
         "\n",
-        "    - -e",
+        "    - -e\n",
         "    - AWS_DEFAULT_REGION=",
         {
           "Ref": "AWS::Region"
         },
         "\n",
-        "    - -e",
+        "    - -e\n",
         "    - AWS_REGION=",
         {
           "Ref": "AWS::Region"
         },
         "\n",
-        "    - -v",
+        "    - -v\n",
         "    - /var/run/docker.sock:/var/run/docker.sock\n",
         "    - sungardas/aws-cfn-bootstrap\n"
       ]
