@@ -1,0 +1,25 @@
+{{#layout}}
+
+  {{parameter "m:core" "base" logicalId="SubnetId" type="AWS::EC2::Subnet::Id" description="Subnet for the ec2 instance"}}
+  {{set "host/parameters_amzlinux"}}
+
+  {{
+    resource "host/rancheros_instance"
+    logicalId="Instance"
+    imageId=(helper "m:amazon-ami" "region-ami" "amzn-ami-hvm-2016.03.1.x86_64-s3")
+    instanceType=(ref "InstanceType")
+    keyName=(ref "KeyPairName")
+    rancherAgentImage=(ref "RancherAgentImage")
+    rancherRegistrationUrl=(ref "RancherRegistrationUrl")
+    securityGroupIds=(ref "SecurityGroupIds")
+    subnetId=(ref "SubnetId")
+    userData=(
+      partial "userdata/amzlinux"
+      dockerVersion='1.11'
+      metadataResource="Instance"
+      notifyResource="Instance"
+    )
+    volumeSize=(ref "VolumeSize")
+  }}
+
+{{/layout}}
