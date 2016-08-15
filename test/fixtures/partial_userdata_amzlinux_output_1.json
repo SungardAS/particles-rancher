@@ -13,7 +13,7 @@
         "  - service docker restart\n",
         "  -\n",
         "    - docker\n",
-        "    - -run\n",
+        "    - run\n",
         "    - -e CFN_METADATA_RESOURCE=",
         "",
         "\n",
@@ -38,8 +38,7 @@
           "Ref": "AWS::Region"
         },
         "\n",
-        "    - -v\n",
-        "    - /var/run/docker.sock:/var/run/docker.sock\n",
+        "    - -v /var/run/docker.sock:/var/run/docker.sock\n",
         "    - sungardas/aws-cfn-bootstrap\n"
       ]
     ]
