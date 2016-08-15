@@ -8,7 +8,7 @@
   {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
 
   {{
-    resource "host/rancheros_instance"
+    resource "host/instance"
     logicalId="Instance"
     imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]} ]}'
     instanceType=(ref "InstanceType")

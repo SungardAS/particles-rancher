@@ -4,7 +4,7 @@
   {{set "host/parameters_amzlinux"}}
 
   {{
-    resource "host/rancheros_instance"
+    resource "host/instance"
     logicalId="Instance"
     imageId=(helper "m:amazon-ami" "region-ami" "amzn-ami-hvm-2016.03.1.x86_64-gp2")
     instanceType=(ref "InstanceType")
