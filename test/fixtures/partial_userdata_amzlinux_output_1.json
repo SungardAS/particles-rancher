@@ -9,36 +9,42 @@
         "packages:\n",
         "  - docker\n",
         "runcmd:\n",
-        "  - echo DOCKER_STORAGE_OPTIONS=\"--storage-driver=AUFS\" > /etc/sysconfig/docker-storage\n",
         "  - service docker restart\n",
         "  -\n",
         "    - docker\n",
         "    - run\n",
-        "    - -e CFN_METADATA_RESOURCE=",
+        "    - -e",
+        "    - CFN_METADATA_RESOURCE=",
         "",
         "\n",
-        "    - -e CFN_NOTIFY_RESOURCE=",
+        "    - -e",
+        "    - CFN_NOTIFY_RESOURCE=",
         "",
         "\n",
-        "    - -e CFN_CONFIG_SETS=",
+        "    - -e",
+        "    - CFN_CONFIG_SETS=",
         "default",
         "\n",
-        "    - -e CFN_STACK_NAME=",
+        "    - -e",
+        "    - CFN_STACK_NAME=",
         {
           "Ref": "AWS::StackName"
         },
         "\n",
-        "    - -e AWS_DEFAULT_REGION=",
+        "    - -e",
+        "    - AWS_DEFAULT_REGION=",
         {
           "Ref": "AWS::Region"
         },
         "\n",
-        "    - -e AWS_REGION=",
+        "    - -e",
+        "    - AWS_REGION=",
         {
           "Ref": "AWS::Region"
         },
         "\n",
-        "    - -v /var/run/docker.sock:/var/run/docker.sock\n",
+        "    - -v",
+        "    - /var/run/docker.sock:/var/run/docker.sock\n",
         "    - sungardas/aws-cfn-bootstrap\n"
       ]
     ]
