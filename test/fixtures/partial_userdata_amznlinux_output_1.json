@@ -9,7 +9,7 @@
         "packages:\n",
         "  - docker\n",
         "runcmd:\n",
-        "  - service docker restart\n",
+        "  - service docker start\n",
         "  -\n",
         "    - docker\n",
         "    - run\n",
