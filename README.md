@@ -30,7 +30,8 @@ Ready to Launch community available templates created from condensation particle
 
 ### Single Instance
 
-|region|rancheros|ubuntu|amznlinux|
+|region|rancheros (overlayfs)|ubuntu (overlayfs)|amznlinux
+(loopback dm)|
 |------|---------|------|---------|
 |us-east-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/rancheros/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/amznlinux/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/ubuntu/instance.template.json)|
 |us-west-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3-us-west-1.amazonaws.com/condensation-particles.us-west-1/particles-rancher/master/particles/cftemplates/host/rancheros/instance.template.json)|
