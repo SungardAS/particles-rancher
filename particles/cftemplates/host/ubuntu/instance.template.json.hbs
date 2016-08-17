@@ -3,10 +3,11 @@
   {{parameter "m:core" "base" logicalId="SubnetId" type="AWS::EC2::Subnet::Id" description="Subnet for the ec2 instance"}}
   {{set "host/parameters_ubuntu"}}
 
+  {{mapping "ubuntu_ami" logicalId="AmiMap"}}
+
   {{
     resource "host/instance"
     logicalId="Instance"
-    imageId=(helper "m:amazon-ami" "region-ami" "amzn-ami-hvm-2016.03.1.x86_64-gp2")
     imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, "xenial"]}'
     instanceType=(ref "InstanceType")
     keyName=(ref "KeyPairName")
