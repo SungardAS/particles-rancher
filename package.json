@@ -1,8 +1,8 @@
 {
   "name": "particles-rancher",
-  "version": "0.1.0-beta.13",
+  "version": "0.1.0",
   "publishConfig": {
-    "tag": "beta"
+    "tag": "latest"
   },
   "description": "Condensation particles for Rancher",
   "scripts": {
