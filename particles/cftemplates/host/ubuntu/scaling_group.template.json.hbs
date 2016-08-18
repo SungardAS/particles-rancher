@@ -1,0 +1,19 @@
+{{#layout}}
+
+  {{set "host/parameters_ubuntu"}}
+  {{set "host/parameters_scaling_group"}}
+
+  {{mapping "ubuntu_ami" logicalId="AmiMap"}}
+
+  {{
+    set "host/resources_scaling_group"
+    imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, "xenial"]}'
+    userData=(
+      partial "userdata/ubuntu"
+      dockerVersion='1.11'
+      metadataResource="LaunchConfiguration"
+      notifyResource="LaunchConfiguration"
+    )
+  }}
+
+{{/layout}}

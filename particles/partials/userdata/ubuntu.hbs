@@ -9,6 +9,7 @@ stackName: '{"Ref": "AWS::StackName"}'
   "packages:\n",
   "  - docker.io\n",
   "runcmd:\n",
+  "  - apt-get install -y linux-headers-$(uname -r)\n",
   "  - service docker start\n",
   "  -\n",
   "    - docker\n",

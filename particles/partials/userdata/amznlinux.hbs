@@ -9,6 +9,7 @@ stackName: '{"Ref": "AWS::StackName"}'
   "packages:\n",
   "  - docker\n",
   "runcmd:\n",
+  "  - yum install -y kernel-headers-$(uname -r)\n",
   "  - service docker start\n",
   "  -\n",
   "    - docker\n",

@@ -1,40 +1,20 @@
 {{#layout}}
 
   {{set "host/parameters_rancheros"}}
-  {{parameter "m:core" "base" logicalId="SubnetIds" type="List<AWS::EC2::Subnet::Id>" description="Subnet for the ec2 instance"}}
-  {{parameter "m:core" "base" logicalId="DesiredCapacity" type="Number"}}
-  {{parameter "m:core" "base" logicalId="MaxSize" type="Number"}}
-  {{parameter "m:core" "base" logicalId="MinSize" type="Number"}}
+  {{set "host/parameters_scaling_group"}}
 
   {{mapping "rancheros_ami" logicalId="RancherAmiMap"}}
   {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
 
   {{
-    resource "host/launch_configuration"
-    logicalId="LaunchConfiguration"
+    set "host/resources_scaling_group"
     imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]} ]}'
-    instanceType=(ref "InstanceType")
-    keyName=(ref "KeyPairName")
-    rancherAgentImage=(ref "RancherAgentImage")
-    rancherRegistrationUrl=(ref "RancherRegistrationUrl")
-    securityGroups=(ref "SecurityGroupIds")
     userData=(
       partial "userdata/rancheros"
       dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "dockerVersion"]}'
       metadataResource="LaunchConfiguration"
       notifyResource="LaunchConfiguration"
     )
-    volumeSize=(ref "VolumeSize")
-  }}
-
-  {{
-    resource "host/autoscale_group"
-    logicalId="AutoScaleGroup"
-    launchConfigurationName=(ref "LaunchConfiguration")
-    desiredCapacity=(ref "DesiredCapacity")
-    maxSize=(ref "MaxSize")
-    minSize=(ref "MinSize")
-    vpcZoneIdentifier=(ref "SubnetIds")
   }}
 
 {{/layout}}

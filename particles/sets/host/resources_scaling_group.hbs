@@ -1,0 +1,22 @@
+{{
+  resource "host/launch_configuration"
+  logicalId="LaunchConfiguration"
+  imageId=imageId
+  instanceType=(ref "InstanceType")
+  keyName=(ref "KeyPairName")
+  rancherAgentImage=(ref "RancherAgentImage")
+  rancherRegistrationUrl=(ref "RancherRegistrationUrl")
+  securityGroups=(ref "SecurityGroupIds")
+  userData=userData
+  volumeSize=(ref "VolumeSize")
+}}
+
+{{
+  resource "host/autoscale_group"
+  logicalId="AutoScaleGroup"
+  launchConfigurationName=(ref "LaunchConfiguration")
+  desiredCapacity=(ref "DesiredCapacity")
+  maxSize=(ref "MaxSize")
+  minSize=(ref "MinSize")
+  vpcZoneIdentifier=(ref "SubnetIds")
+}}
