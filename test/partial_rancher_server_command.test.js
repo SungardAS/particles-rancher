@@ -8,7 +8,7 @@ describe("partials", function() {
     it("builds the rancher-server command", function() {
       cTests.testParticle(
         "partial",
-        "rancher_server_command",
+        "server/start_command",
         require("./fixtures/partial_rancher_server_command_output_1"),
         {hArgs: {}}
       );
@@ -18,7 +18,7 @@ describe("partials", function() {
   it("will add mysql configuration", function() {
     cTests.testParticle(
       "partial",
-      "rancher_server_command",
+      "server/start_command",
       require("./fixtures/partial_rancher_server_command_output_2"),
       {hArgs: {
         cattleDbCattleMysqlName: "dbName",
