@@ -22,11 +22,11 @@ was deployed with.
 
 ## Build
 
-With [docker-condensation][docker-condensation-url]:
+With [docker-condensation][docker-condensation-url]
 
     $ condensation run build
 
-With node:
+With node
 
     $ npm run build
 
