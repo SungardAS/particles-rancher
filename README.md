@@ -22,16 +22,37 @@ was deployed with.
 
 ## Build
 
-    > npm run build
+With [docker-condensation][docker-condensation-url]:
+
+    $ condensation run build
+
+With node:
+
+    $ npm run build
 
 ## Ready To Launch
 
-Ready to Launch community available templates created from condensation particles
+Ready to Launch community available templates created from condensation particles.
+
+Choose your base OS:
+
+**rancheros**
+FS: overlay
+DockerVersions: 1.10, 1.11
+
+**ubuntu**
+FS: overlay
+DockerVersions: 1.11, 1.12
+
+**amznlinux**
+FS: device-mapper (loopback)
+DockerVersions: 1.11
+
 
 ### Single Instance Host
 
-|region|rancheros (overlayfs)|ubuntu (overlayfs)|amznlinux (loopback dm)|
-|------|---------------------|------------------|-----------------------|
+|region|rancheros|ubuntu|amznlinux|
+|------|---------|------|---------|
 |us-east-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/rancheros/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/ubuntu/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-east-1/particles-rancher/master/particles/cftemplates/host/amznlinux/instance.template.json)|
 |us-west-1|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-west-1/particles-rancher/master/particles/cftemplates/host/rancheros/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-west-1/particles-rancher/master/particles/cftemplates/host/ubuntu/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-west-1/particles-rancher/master/particles/cftemplates/host/amznlinux/instance.template.json)|
 |us-west-2|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-west-2/particles-rancher/master/particles/cftemplates/host/rancheros/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-west-2/particles-rancher/master/particles/cftemplates/host/ubuntu/instance.template.json)|[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=particles-rancher-instance&templateURL=https://s3.amazonaws.com/condensation-particles.us-west-2/particles-rancher/master/particles/cftemplates/host/amznlinux/instance.template.json)|
@@ -75,6 +96,7 @@ Blog:
 [labs-image]: https://raw.githubusercontent.com/SungardAS/repo-assets/master/images/logos/sungardas-labs-logo-small.png
 [condensation-image]: https://raw.githubusercontent.com/SungardAS/condensation/master/docs/images/condensation_logo.png
 [condensation-url]: https://github.com/SungardAS/condensation
+[docker-condensation]: https://github.com/SungardAS/docker-condensation
 [npm-image]: https://badge.fury.io/js/particles-rancher.svg
 [npm-url]: https://npmjs.org/package/particles-rancher
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
