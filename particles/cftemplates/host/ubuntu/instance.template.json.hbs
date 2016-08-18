@@ -3,13 +3,15 @@
   {{set "host/parameters_ubuntu"}}
 
   {{mapping "ubuntu_ami" logicalId="AmiMap"}}
+  {{mapping "ubuntu_versions" logicalId="VersionMap"}}
 
   {{
     set "host/instance"
-    imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, "xenial"]}'
+    imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "mapName"]} ]}'
     userData=(
       partial "userdata/ubuntu"
-      dockerVersion='1.11'
+      dockerPackage='{"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "dockerPackage"]}'
+      cfnBootstrapTag='{"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "dockerVersion"]}'
       metadataResource="Instance"
       notifyResource="Instance"
     )

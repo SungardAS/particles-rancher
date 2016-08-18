@@ -7,7 +7,7 @@ stackName: '{"Ref": "AWS::StackName"}'
   "apt_update: true\n",
   "apt_upgrade: true\n",
   "apt_sources:\n",
-  "  - source: \"deb https://apt.dockerproject.org/repo ubuntu-xenial main\"\n",
+  "  - source: \"deb https://apt.dockerproject.org/repo $RELEASE main\"\n",
   "    key: |\n",
   "      -----BEGIN PGP PUBLIC KEY BLOCK-----\n",
   "      \n",
@@ -39,7 +39,7 @@ stackName: '{"Ref": "AWS::StackName"}'
   "      =Fm3p\n",
   "      -----END PGP PUBLIC KEY BLOCK-----\n",
   "packages:\n",
-  "  - docker-engine\n",
+  "  - docker-engine=",{{helper "m:core" "propertyValue" dockerPackage}},"\n",
   "runcmd:\n",
   "  - apt-get install -y linux-headers-$(uname -r)\n",
   "  - service docker start\n",
@@ -62,5 +62,5 @@ stackName: '{"Ref": "AWS::StackName"}'
   "    - AWS_REGION=",{"Ref": "AWS::Region"},"\n",
   "    - -v\n",
   "    - /var/run/docker.sock:/var/run/docker.sock\n",
-  "    - sungardas/aws-cfn-bootstrap\n"
+  "    - sungardas/aws-cfn-bootstrap:",{{helper "m:core" "propertyValue" cfnBootstrapTag}},"\n"
 ]]}}
