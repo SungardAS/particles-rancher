@@ -7,7 +7,7 @@ stackName: '{"Ref": "AWS::StackName"}'
   "apt_update: true\n",
   "apt_upgrade: true\n",
   "apt_sources:\n",
-  "  - source: \"deb https://apt.dockerproject.org/repo $RELEASE main\"\n",
+  "  - source: \"deb https://apt.dockerproject.org/repo ubuntu-$RELEASE main\"\n",
   "    key: |\n",
   "      -----BEGIN PGP PUBLIC KEY BLOCK-----\n",
   "      \n",
