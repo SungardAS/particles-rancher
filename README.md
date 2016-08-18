@@ -38,21 +38,18 @@ Choose your base OS:
 
 **rancheros**
 
-FS: overlay
-
-DockerVersions: 1.10, 1.11
+    FS: overlay
+    DockerVersions: 1.10, 1.11
 
 **ubuntu**
 
-FS: overlay
-
-DockerVersions: 1.11, 1.12
+    FS: overlay
+    DockerVersions: 1.11, 1.12
 
 **amznlinux**
 
-FS: device-mapper (loopback)
-
-DockerVersions: 1.11
+    FS: device-mapper (loopback)
+    DockerVersions: 1.11
 
 
 ### Single Instance Host
@@ -102,7 +99,7 @@ Blog:
 [labs-image]: https://raw.githubusercontent.com/SungardAS/repo-assets/master/images/logos/sungardas-labs-logo-small.png
 [condensation-image]: https://raw.githubusercontent.com/SungardAS/condensation/master/docs/images/condensation_logo.png
 [condensation-url]: https://github.com/SungardAS/condensation
-[docker-condensation]: https://github.com/SungardAS/docker-condensation
+[docker-condensation-url]: https://github.com/SungardAS/docker-condensation
 [npm-image]: https://badge.fury.io/js/particles-rancher.svg
 [npm-url]: https://npmjs.org/package/particles-rancher
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
