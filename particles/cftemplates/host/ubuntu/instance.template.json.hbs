@@ -7,7 +7,7 @@
 
   {{
     set "host/instance"
-    imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "mapName"]} ]}'
+    imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "osRelease"]} ]}'
     userData=(
       partial "userdata/ubuntu"
       dockerPackage='{"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "dockerPackage"]}'
