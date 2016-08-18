@@ -13,6 +13,8 @@ stackName: '{"Ref": "AWS::StackName"}'
   "  -\n",
   "    - docker\n",
   "    - run\n",
+  "    - --name\n",
+  "    - aws-cfn-bootstrap\n",
   "    - -e\n",
   "    - CFN_METADATA_RESOURCE=", {{helper "m:core" "propertyValue" metadataResource}},"\n",
   "    - -e\n",

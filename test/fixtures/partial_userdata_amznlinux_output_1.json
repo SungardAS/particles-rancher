@@ -13,6 +13,8 @@
         "  -\n",
         "    - docker\n",
         "    - run\n",
+        "    - --name\n",
+        "    - aws-cfn-bootstrap\n",
         "    - -e\n",
         "    - CFN_METADATA_RESOURCE=",
         "",
