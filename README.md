@@ -37,15 +37,21 @@ Ready to Launch community available templates created from condensation particle
 Choose your base OS:
 
 **rancheros**
+
 FS: overlay
+
 DockerVersions: 1.10, 1.11
 
 **ubuntu**
+
 FS: overlay
+
 DockerVersions: 1.11, 1.12
 
 **amznlinux**
+
 FS: device-mapper (loopback)
+
 DockerVersions: 1.11
 
 
