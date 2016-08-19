@@ -42,6 +42,7 @@ stackName: '{"Ref": "AWS::StackName"}'
   "  - docker-engine=",{{helper "m:core" "propertyValue" dockerPackage}},"\n",
   "runcmd:\n",
   "  - apt-get install -y linux-headers-$(uname -r)\n",
+  "  - apt-get -y install linux-image-extra-$(uname -r)\n",
   "  - service docker start\n",
   "  -\n",
   "    - docker\n",

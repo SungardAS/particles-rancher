@@ -38,12 +38,12 @@ Choose your base OS:
 
 **rancheros**
 
-    FS: overlay
+    FS: overlayfs
     DockerVersions: 1.10, 1.11
 
 **ubuntu**
 
-    FS: overlay
+    FS: aufs
     DockerVersions: 1.11, 1.12
 
 **amznlinux**
