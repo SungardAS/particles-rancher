@@ -37,7 +37,7 @@
     "docker"
   ],
   "dependencies": {
-    "condensation": "^0.5.6-rc3",
+    "condensation": "0.5.6-rc5",
     "config": "^1.20.1",
     "git-rev-sync": "^1.6.0",
     "gulp": "^3.9.1",
