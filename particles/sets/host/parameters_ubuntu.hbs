@@ -1,9 +1,2 @@
 {{set "host/parameters"}}
-{{
-  parameter "m:core" "base"
-  logicalId="DockerVersion"
-  type="String"
-  allowedValues='["1.12.1-0-xenial","1.12.0-0-xenial","1.11.2-0-xenial","1.11.1-0-xenial","1.11.0-0-xenial"]'
-  default="1.12.0-0-xenial"
-}}
-
+{{parameter "ubuntu/docker_version" logicalId="DockerVersion"}}
