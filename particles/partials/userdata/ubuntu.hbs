@@ -39,7 +39,7 @@ stackName: '{"Ref": "AWS::StackName"}'
   "      =Fm3p\n",
   "      -----END PGP PUBLIC KEY BLOCK-----\n",
   "packages:\n",
-  "  - docker-engine=",{{helper "m:core" "propertyValue" dockerPackage}},"\n",
+  "  - [docker-engine,",{{helper "m:core" "propertyValue" dockerPackage}},"]\n",
   "runcmd:\n",
   "  - apt-get install -y linux-headers-$(uname -r)\n",
   "  - apt-get -y install linux-image-extra-$(uname -r)\n",
