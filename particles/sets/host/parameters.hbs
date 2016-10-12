@@ -4,3 +4,15 @@
 {{parameter "m:core" "base" type="Number" logicalId="VolumeSize" default=8}}
 {{parameter "m:core" "base" type="String" logicalId="RancherAgentImage"}}
 {{parameter "m:core" "base" type="String" logicalId="RancherRegistrationUrl" description="Rancher registration URL"}}
+
+{{
+  parameter "m:core" "base"
+  logicalId="CattleHostLabels"
+  type="CommaDelimitedList"
+  default=[
+    "az=`ec2-metadata-value -z`",
+    "public-ipv4=`ec2-metadata-value -v`",
+    "instance-type=`ec2-metadata-value -t`",
+    "instance-id=`ec2-metadata-value -i`"
+  ]
+}}

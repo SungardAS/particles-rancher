@@ -8,6 +8,7 @@
 
   {{
     set "host/resources_scaling_group"
+    cattleHostLabels=(ref "CattleHostLabels")
     imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "osRelease"]} ]}'
     signalCount=(ref "DesiredCapacity")
     userData=(

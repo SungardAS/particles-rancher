@@ -7,6 +7,7 @@
 
   {{
     set "host/instance"
+    cattleHostLabels=(ref "CattleHostLabels")
     imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "osRelease"]} ]}'
     userData=(
       partial "userdata/ubuntu"
