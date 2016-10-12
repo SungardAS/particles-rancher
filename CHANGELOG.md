@@ -3,6 +3,15 @@ All notable changes to this project will be documented here in
 accordance with [Keep a CHANGELOG][keep-changelog-url].
 This project adheres to [Semantic Versioning][semver-url].
 
+## [0.1.6] - 2016-10-12
+
+### Added
+- docker-1.12.2 for ubuntu
+
+### Changed
+- autoscaling now delivers signals to cloudformation for desired
+  capacity
+
 ## [0.1.5] - 2016-09-15
 
 ### Changed
