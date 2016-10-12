@@ -1,3 +1,6 @@
+---
+signalTimeout: PT7M
+---
 {{#resource "m:core" "base" type="AWS::AutoScaling::AutoScalingGroup"}}
   {{#helper "m:core" "properties"}}
     {{helper "m:core" "property" "DesiredCapacity"}}
@@ -5,5 +8,11 @@
     {{helper "m:core" "property" "MaxSize"}}
     {{helper "m:core" "property" "MinSize"}}
     {{helper "m:core" "property" "VPCZoneIdentifier" valueVariable="vpcZoneIdentifier"}}
-  {{/helper}}
+  {{/helper}},
+  "CreationPolicy": {
+    "ResourceSignal": {
+      "Count": {{helper "m:core" "propertyValue" signalCount}},
+      "Timeout": {{helper "m:core" "propertyValue" signalTimeout}}
+    }
+  }
 {{/resource}}
