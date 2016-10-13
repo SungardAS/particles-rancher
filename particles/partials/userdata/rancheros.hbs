@@ -7,10 +7,20 @@ dockerVersion: 1.11
   "#cloud-config\n",
   "rancher:\n",
   "  environment:\n",
-  "    RESIZE_DEV: /dev/xvda\n",
+  {{
+    partial "m:core" "fn_if"
+    conditionId="Is050Compatible"
+    trueValue="    RESIZE_DEV: /dev/xvda\n"
+    falseValue=""
+  }},
   "  services_include:\n",
   "    kernel-headers: true\n",
-  "    https://raw.githubusercontent.com/rancher/os-services/v0.4.5/r/resize-fs.yml: true\n",
+  {{
+    partial "m:core" "fn_if"
+    conditionId="Is050Compatible"
+    trueValue="    https://raw.githubusercontent.com/rancher/os-services/v0.4.5/r/resize-fs.yml: true\n"
+    falseValue=""
+  }},
   "  services:\n",
   "    aws-cfn-bootstrap:\n",
   "      image: sungardas/aws-cfn-bootstrap:",{{helper "m:core" "propertyValue" dockerVersion}},"\n",
