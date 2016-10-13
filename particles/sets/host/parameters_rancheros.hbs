@@ -1,2 +1,17 @@
 {{set "host/parameters"}}
 {{parameter "rancheros/os_version" logicalId="OsVersion"}}
+{{
+  condition "rancheros/045_compatible"
+  logicalId="Is045Compatible"
+  parameterLogicalId="OsVersion"
+}}
+{{
+  condition "rancheros/050_compatible"
+  logicalId="Is050Compatible"
+  parameterLogicalId="OsVersion"
+}}
+{{
+  condition "rancheros/061_compatible"
+  logicalId="Is061Compatible"
+  parameterLogicalId="OsVersion"
+}}

@@ -39,7 +39,7 @@ Choose your base OS:
 **rancheros**
 
     FS: overlayfs
-    DockerVersions: 1.10, 1.11
+    DockerVersions: 1.10 (0.4.5), 1.11 (0.5.0), 1.12 (0.6.1)
 
 **ubuntu**
 
