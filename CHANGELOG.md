@@ -3,6 +3,11 @@ All notable changes to this project will be documented here in
 accordance with [Keep a CHANGELOG][keep-changelog-url].
 This project adheres to [Semantic Versioning][semver-url].
 
+## [0.1.7] - 2016-10-12
+
+### Added
+- rancheros 0.6.1
+
 ## [0.1.6] - 2016-10-12
 
 ### Added
