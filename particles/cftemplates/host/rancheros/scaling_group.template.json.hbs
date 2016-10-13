@@ -14,7 +14,7 @@
       partial "userdata/rancheros"
       dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "dockerVersion"]}'
       metadataResource="LaunchConfiguration"
-      notifyResource="LaunchConfiguration"
+      notifyResource="AutoScaleGroup"
     )
   }}
 
