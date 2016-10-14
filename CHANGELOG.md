@@ -3,6 +3,11 @@ All notable changes to this project will be documented here in
 accordance with [Keep a CHANGELOG][keep-changelog-url].
 This project adheres to [Semantic Versioning][semver-url].
 
+## [0.1.9] - 2016-10-14
+
+### Fixed
+- rancheros and amznlinux autoscale notification count
+
 ## [0.1.8] - 2016-10-12
 
 ### Fixed
