@@ -13,7 +13,9 @@
 
 {{#resource "m:core" "base"
   type="AWS::IAM::InstanceProfile"
-  logicalId="CharroComputeInstanceProfile"}}
+  logicalId="CharroComputeInstanceProfile"
+  condition=(scopeId "InstanceProfileRoleIsPopulated")
+}}
   "Properties": {
     "Path": "/particles-rancher/",
     "Roles": [
