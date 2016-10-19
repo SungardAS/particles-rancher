@@ -3,6 +3,11 @@ All notable changes to this project will be documented here in
 accordance with [Keep a CHANGELOG][keep-changelog-url].
 This project adheres to [Semantic Versioning][semver-url].
 
+## [0.1.10] - 2016-10-18
+
+### Added
+- Optional Instance Profile if IAM role provided
+
 ## [0.1.9] - 2016-10-14
 
 ### Fixed

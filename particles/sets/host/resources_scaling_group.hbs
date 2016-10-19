@@ -1,6 +1,38 @@
 {{
+  parameter "m:core" "base"
+  type="String"
+  logicalId="InstanceProfileRole"
+  description="IAM Role for the Instance Profile"
+  optional=true
+}}
+{{
+  condition "m:core" "is_populated"
+  logicalId="InstanceProfileRoleIsPopulated"
+  parameterLogicalId=(scopeId "InstanceProfileRole")
+}}
+
+{{#resource "m:core" "base"
+  type="AWS::IAM::InstanceProfile"
+  logicalId="CharroComputeInstanceProfile"
+  condition=(scopeId "InstanceProfileRoleIsPopulated")
+}}
+  "Properties": {
+    "Path": "/particles-rancher/",
+    "Roles": [
+      {{ref "InstanceProfileRole"}}
+    ]
+  }
+{{/resource}}
+
+{{
   resource "host/launch_configuration"
   logicalId="LaunchConfiguration"
+  iamInstanceProfile=(
+    partial "m:core" "fn_if"
+    conditionId=(scopeId "InstanceProfileRoleIsPopulated")
+    trueValue=(ref "CharroComputeInstanceProfile")
+    falseValue=(ref "AWS::NoValue")
+  )
   imageId=imageId
   instanceType=(ref "InstanceType")
   keyName=(ref "KeyPairName")
