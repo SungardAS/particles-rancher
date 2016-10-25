@@ -1,11 +1,12 @@
 {
   "DockerVersion": {
     "AllowedValues": [
+      "0.7.0",
       "0.6.1",
       "0.5.0",
       "0.4.5"
     ],
-    "Default": "0.6.1",
+    "Default": "0.7.0",
     "Type": "String"
   }
 }
