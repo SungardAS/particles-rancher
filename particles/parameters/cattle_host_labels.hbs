@@ -1,0 +1,6 @@
+{{
+  parameter "m:core" "base"
+  type="CommaDelimitedList"
+  default="az=`ec2-metadata --vo -z`,public-ipv4=`ec2-metadata --vo -v`,instance-type=`ec2-metadata --vo -t`,instance-id=`ec2-metadata --vo -i`,instance-role=`ec2-metadata --vo -f`"
+  description="List of labels that will be added to CATTLE_HOST_LABELS"
+}}
