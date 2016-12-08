@@ -1,0 +1,26 @@
+{{
+  parameter "m:core" "base"
+  type="String"
+  logicalId="InstanceProfileRole"
+  description="IAM Role for the Instance Profile"
+  optional=true
+}}
+
+{{
+  condition "m:core" "is_populated"
+  logicalId="InstanceProfileRoleIsPopulated"
+  parameterLogicalId=(scopeId "InstanceProfileRole")
+}}
+
+{{#resource "m:core" "base"
+  type="AWS::IAM::InstanceProfile"
+  logicalId="InstanceProfile"
+  condition=(scopeId "InstanceProfileRoleIsPopulated")
+}}
+  "Properties": {
+    "Path": "/particles-rancher/",
+    "Roles": [
+      {{ref "InstanceProfileRole"}}
+    ]
+  }
+{{/resource}}

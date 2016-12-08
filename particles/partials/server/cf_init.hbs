@@ -1,0 +1,19 @@
+---
+rancherServerImage: rancher/server:1.2.0
+---
+{
+  "configSets": {
+    "default": ["runApp"]
+  },
+  "runApp": {
+    "commands": {
+      "001": {
+        "command": {{
+          partial "server/start_command"
+          cattleClusterAdvertiseAddress="`ec2-metadata --vo -o`"
+        }}
+      }
+    }
+  }
+}
+

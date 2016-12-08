@@ -1,0 +1,19 @@
+{{set "instance_profile"}}
+
+{{
+  resource "server/ha/launch_configuration"
+  logicalId="LaunchConfiguration"
+  iamInstanceProfile=(
+    partial "m:core" "fn_if"
+    conditionId=(scopeId "InstanceProfileRoleIsPopulated")
+    trueValue=(ref "InstanceProfile")
+    falseValue=(ref "AWS::NoValue")
+  )
+  imageId=imageId
+  userData=userData
+}}
+
+{{
+  resource "server/ha/autoscale_group"
+  logicalId="AutoScaleGroup"
+}}
