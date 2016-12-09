@@ -1,7 +1,7 @@
 {{#layout}}
 
   {{set "server/parameters_rancheros"}}
-  {{set "server/parameters_scaling_group"}}
+  {{set "server/parameters_scaling_group" vpcId=(ref "VpcId")}}
 
   {{mapping "rancheros_ami" logicalId="RancherAmiMap"}}
   {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
@@ -28,7 +28,6 @@
     )
     volumeSize=(ref "VolumeSize")
     vpcZoneIdentifier=(ref "SubnetIds")
-    vpcId=(ref "VpcId")
   }}
 
 {{/layout}}
