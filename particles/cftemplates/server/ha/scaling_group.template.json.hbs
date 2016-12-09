@@ -1,7 +1,6 @@
 {{#layout}}
 
-  {{#metadata}}
-    "AWS::CloudFormation::Interface" : {
+  {{#metadata logicalId="AWS::CloudFormation::Interface"}}
       "ParameterGroups" : [
         {
           "Label" : { "default" : "Rancher Server" },
@@ -20,7 +19,6 @@
           "Parameters" : [ "InstanceType", "VolumeSize", "KeyName", "InstanceProfileRole" ]
         }
       ]
-    }
   {{/metadata}}
 
   {{set "server/parameters_rancheros"}}
