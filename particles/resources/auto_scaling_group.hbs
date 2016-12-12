@@ -8,6 +8,7 @@ signalTimeout: PT7M
     {{helper "m:core" "property" "MaxSize"}}
     {{helper "m:core" "property" "MinSize"}}
     {{helper "m:core" "property" "VPCZoneIdentifier" valueVariable="vpcZoneIdentifier"}}
+    {{helper "m:core" "property" "TargetGroupARNs" optional=true}}
   {{/helper}},
   "CreationPolicy": {
     "ResourceSignal": {

@@ -3,3 +3,11 @@
   logicalId="SecurityGroup"
   groupDescription="Rancher Server"
 }}
+
+{{
+  resource "m:vpc" "security_group/ingress"
+  logicalId="RancherServerIngress"
+  sourceSecurityGroupId=(ref "SecurityGroup")
+  fromPort=9345
+  toPort=9345
+}}

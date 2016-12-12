@@ -1,5 +1,45 @@
 {{set "instance_profile"}}
 
+{{#resource logicalId="LoadBalancer"}}
+  "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+  "Properties": {
+    "Subnets": {{vpcZoneIdentifier}}
+  }
+{{/resource}}
+
+{{#resource
+  logicalId="LoadBalancerTargetGroup"
+}}
+  "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+  "Properties": {
+    "HealthCheckIntervalSeconds": 20,
+    "HealthCheckPath": "/ping",
+    "HealthCheckPort": 8080,
+    "HealthCheckProtocol": "HTTP",
+    "HealthCheckTimeoutSeconds": 5,
+    "HealthyThresholdCount": 2,
+    "Port": 8080,
+    "Protocol": "HTTP",
+    "UnhealthyThresholdCount": 2,
+    "VpcId": {{helper "m:core" "propertyValue" vpcId}}
+  }
+{{/resource}}
+
+{{#resource logicalId="LoadBalancerListener"}}
+  "Type" : "AWS::ElasticLoadBalancingV2::Listener",
+  "Properties" : {
+    "DefaultActions": [
+      {
+        "TargetGroupArn": {{ref "LoadBalancerTargetGroup"}},
+        "Type": "forward"
+      }
+    ],
+    "LoadBalancerArn": {{ref "LoadBalancer"}},
+    "Port": 80,
+    "Protocol": "HTTP"
+  }
+{{/resource}}
+
 {{
   resource "server/ha/launch_configuration"
   logicalId="LaunchConfiguration"
@@ -16,4 +56,5 @@
 {{
   resource "server/ha/autoscale_group"
   logicalId="AutoScaleGroup"
+  targetGroupARNs=(concat '[' (ref "LoadBalancerTargetGroup") ']')
 }}
