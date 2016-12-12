@@ -7,6 +7,7 @@
 {{
   resource "m:vpc" "security_group/ingress"
   logicalId="RancherServerIngress"
+  groupId=(ref "SecurityGroup")
   sourceSecurityGroupId=(ref "SecurityGroup")
   fromPort=9345
   toPort=9345
