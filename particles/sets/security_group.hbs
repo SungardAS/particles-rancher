@@ -9,6 +9,7 @@
   logicalId="RancherServerIngress"
   groupId=(ref "SecurityGroup")
   sourceSecurityGroupId=(ref "SecurityGroup")
+  ipProtocol="tcp"
   fromPort=9345
   toPort=9345
 }}
