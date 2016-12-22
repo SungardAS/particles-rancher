@@ -1,6 +1,6 @@
 {{set "instance_profile"}}
 
-{{set "server/ha/load_balancing"}}
+{{set "server/ha/load_balancing" subnets=vpcZoneIdentifier}}
 
 {{
   resource "server/ha/launch_configuration"

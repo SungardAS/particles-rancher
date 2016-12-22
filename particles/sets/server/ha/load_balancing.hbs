@@ -1,10 +1,4 @@
-{{#resource logicalId="LoadBalancer"}}
-  "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-  "Properties": {
-    "Subnets": {{vpcZoneIdentifier}}
-  }
-{{/resource}}
-
+{{resource "server/ha/load_balancer" logicalId="LoadBalancer"}}
 {{resource "server/ha/target_group" logicalId="LoadBalancerTargetGroup"}}
 
 {{#resource logicalId="LoadBalancerListener"}}
