@@ -1,8 +1,8 @@
 {
   "name": "particles-rancher",
-  "version": "0.1.10",
+  "version": "0.2.0-rc0",
   "publishConfig": {
-    "tag": "latest"
+    "tag": "rc"
   },
   "description": "Condensation particles for Rancher",
   "scripts": {
@@ -37,7 +37,7 @@
     "docker"
   ],
   "dependencies": {
-    "condensation": "0.5.6",
+    "condensation": "^0.6.0-rc1",
     "config": "^1.20.1",
     "git-rev-sync": "^1.6.0",
     "gulp": "^3.9.1",

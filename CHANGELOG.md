@@ -3,6 +3,15 @@ All notable changes to this project will be documented here in
 accordance with [Keep a CHANGELOG][keep-changelog-url].
 This project adheres to [Semantic Versioning][semver-url].
 
+## [0.1.10] - 2016-10-25
+
+### Added
+- rancheros 0.7.0
+- ec2 instance role to default host labels
+
+### Changed
+- xenial AMIs
+
 ## [0.1.10] - 2016-10-18
 
 ### Added

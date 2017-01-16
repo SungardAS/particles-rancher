@@ -1,0 +1,17 @@
+{{resource "server/ha/load_balancer" logicalId="LoadBalancer"}}
+{{resource "server/ha/target_group" logicalId="LoadBalancerTargetGroup"}}
+
+{{#resource logicalId="LoadBalancerListener"}}
+  "Type" : "AWS::ElasticLoadBalancingV2::Listener",
+  "Properties" : {
+    "DefaultActions": [
+      {
+        "TargetGroupArn": {{ref "LoadBalancerTargetGroup"}},
+        "Type": "forward"
+      }
+    ],
+    "LoadBalancerArn": {{ref "LoadBalancer"}},
+    "Port": 80,
+    "Protocol": "HTTP"
+  }
+{{/resource}}

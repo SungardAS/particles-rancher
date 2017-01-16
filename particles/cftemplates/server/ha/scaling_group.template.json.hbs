@@ -1,0 +1,57 @@
+{{#layout}}
+
+  {{#metadata logicalId="AWS::CloudFormation::Interface"}}
+      "ParameterGroups" : [
+        {
+          "Label" : { "default" : "Rancher Server" },
+          "Parameters" : [ "RancherServerImage" ]
+        },
+        {
+          "Label" : { "default" : "AutoScaling" },
+          "Parameters" : [ "DesiredCapacity", "MinSize", "MaxSize" ]
+        },
+        {
+          "Label" : { "default" : "Network" },
+          "Parameters" : [ "VpcId", "SubnetIds" ]
+        },
+        {
+          "Label" : { "default":"EC2 Configuration" },
+          "Parameters" : [ "OsVersion", "InstanceType", "VolumeSize", "KeyPairName", "InstanceProfileRole" ]
+        }
+      ]
+  {{/metadata}}
+
+  {{set "server/parameters_rancheros"}}
+  {{set "server/parameters_scaling_group" vpcId=(ref "VpcId")}}
+
+  {{mapping "rancheros_ami" logicalId="RancherAmiMap"}}
+  {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
+
+
+  {{
+    set "server/ha/resources_scaling_group"
+    cattleHostLabels=(ref "CattleHostLabels")
+    desiredCapacity=(ref "DesiredCapacity")
+    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]} ]}'
+    instanceType=(ref "InstanceType")
+    keyName=(ref "KeyPairName")
+    launchConfigurationName=(ref "LaunchConfiguration")
+    maxSize=(ref "MaxSize")
+    minSize=(ref "MinSize")
+    rancherAgentImage=(ref "RancherAgentImage")
+    rancherRegistrationUrl=(ref "RancherRegistrationUrl")
+    rancherServerImage=(ref "RancherServerImage")
+    securityGroups=(concat '[' (ref "SecurityGroup") ']')
+    signalCount=(ref "DesiredCapacity")
+    userData=(
+      partial "userdata/rancheros"
+      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "dockerVersion"]}'
+      metadataResource="LaunchConfiguration"
+      notifyResource="AutoScaleGroup"
+    )
+    volumeSize=(ref "VolumeSize")
+    vpcZoneIdentifier=(ref "SubnetIds")
+    vpcId=(ref "VpcId")
+  }}
+
+{{/layout}}
