@@ -20,8 +20,8 @@ frontload:
     userData=(
       partial "userdata/rancheros"
       dockerVersion=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "dockerVersion")
-      metadataResource="LaunchConfiguration"
-      notifyResource="AutoScaleGroup"
+      resizeDevCondition="Is050Condition"
+      resizeServiceCondition="Is050Condition"
     )
   }}
 
