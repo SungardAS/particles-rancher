@@ -37,15 +37,14 @@
     "docker"
   ],
   "dependencies": {
-    "condensation": "^0.6.0-rc1",
+    "condensation": "sungardas/condensation#develop",
     "config": "^1.20.1",
     "git-rev-sync": "^1.6.0",
     "gulp": "^3.9.1",
-    "particles-amazon-ami": "0.1.0-beta.1",
     "particles-core": "^0.4.6",
-    "particles-ec2": "^0.3.0",
+    "particles-ec2": "sungardas/particles-ec2#develop",
     "particles-rds": "^0.1.0-beta.0",
-    "particles-vpc": "^0.5.0-rc8"
+    "particles-vpc": "^0.5.0"
   },
   "devDependencies": {
     "condensation-particle-tests": "^0.5.2",

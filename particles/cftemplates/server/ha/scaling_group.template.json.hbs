@@ -1,3 +1,8 @@
+---
+frontload:
+  amis:
+    loader: rancheros
+---
 {{#layout}}
 
   {{#metadata logicalId="AWS::CloudFormation::Interface"}}
@@ -24,15 +29,16 @@
   {{set "server/parameters_rancheros"}}
   {{set "server/parameters_scaling_group" vpcId=(ref "VpcId")}}
 
-  {{mapping "rancheros_ami" logicalId="RancherAmiMap"}}
-  {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
+  {{#with amis}}
+    {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
+  {{/with}}
 
 
   {{
     set "server/ha/resources_scaling_group"
     cattleHostLabels=(ref "CattleHostLabels")
     desiredCapacity=(ref "DesiredCapacity")
-    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]} ]}'
+    imageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
     instanceType=(ref "InstanceType")
     keyName=(ref "KeyPairName")
     launchConfigurationName=(ref "LaunchConfiguration")
@@ -41,11 +47,11 @@
     rancherAgentImage=(ref "RancherAgentImage")
     rancherRegistrationUrl=(ref "RancherRegistrationUrl")
     rancherServerImage=(ref "RancherServerImage")
-    securityGroups=(concat '[' (ref "SecurityGroup") ']')
+    securityGroups=(arrayify (ref "SecurityGroup") )
     signalCount=(ref "DesiredCapacity")
     userData=(
       partial "userdata/rancheros"
-      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "dockerVersion"]}'
+      dockerVersion=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "dockerVersion")
       metadataResource="LaunchConfiguration"
       notifyResource="AutoScaleGroup"
     )

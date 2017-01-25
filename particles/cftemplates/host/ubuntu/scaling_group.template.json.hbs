@@ -1,20 +1,34 @@
+---
+frontload:
+  xenialAmi:
+    module: particles-ec2
+    loader: ami
+    opts:
+      Owners: ["099720109477"]
+      Filters:
+        -
+          Name: state
+          Values: ["available"]
+        -
+          Name: name
+          Values: ["ubuntu/images/hvm-ssd/ubuntu-xenial*"]
+---
 {{#layout}}
 
   {{set "host/parameters_ubuntu"}}
   {{set "host/parameters_scaling_group"}}
 
-  {{mapping "ubuntu_ami" logicalId="AmiMap"}}
   {{mapping "ubuntu_versions" logicalId="VersionMap"}}
 
   {{
     set "host/resources_scaling_group"
     cattleHostLabels=(ref "CattleHostLabels")
-    imageId='{"Fn::FindInMap": ["AmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "osRelease"]} ]}'
+    imageId=(fnFindInMap "VersionMap" (ref "DockerVersion") "ami")
     signalCount=(ref "DesiredCapacity")
     userData=(
       partial "userdata/ubuntu"
-      dockerPackage='{"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "dockerPackage"]}'
-      cfnBootstrapTag='{"Fn::FindInMap": ["VersionMap", {"Ref": "DockerVersion"}, "dockerVersion"]}'
+      dockerPackage=(fnFindInMap "VersionMap" (ref "DockerVersion") "dockerPackage")
+      cfnBootstrapTag=(fnFindInMap "VersionMap" (ref "DockerVersion") "dockerVersion")
       metadataResource="LaunchConfiguration"
       notifyResource="AutoScaleGroup"
     )
