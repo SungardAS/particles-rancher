@@ -37,6 +37,7 @@
     "docker"
   ],
   "dependencies": {
+    "async": "^2.1.4",
     "condensation": "sungardas/condensation#develop",
     "config": "^1.20.1",
     "git-rev-sync": "^1.6.0",
