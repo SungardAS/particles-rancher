@@ -5,8 +5,8 @@
     (partial "userdata/rancheros/cloud_config")
     ConfigSets="default"
     DockerVersion=dockerVersion
-    MetadataResource="Instance"
-    NotifyResource="Instance"
+    MetadataResource=metadataResource
+    NotifyResource=notifyResource
     ResizeDev=(partial "userdata/rancheros/resize_dev")
     ResizeService=(partial "userdata/rancheros/resize_service")
   )

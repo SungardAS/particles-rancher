@@ -20,6 +20,8 @@ frontload:
       dockerVersion=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "dockerVersion")
       resizeDevCondition="Is050Condition"
       resizeServiceCondition="Is050Condition"
+      metadataResource="Instance"
+      notifyResource="Instance"
     )
   }}
 
