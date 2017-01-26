@@ -4,7 +4,7 @@
     fnSub
     (partial "userdata/rancheros/cloud_config")
     ConfigSets="default"
-    DockerVersion=(cValue dockerVersion)
+    DockerVersion=dockerVersion
     MetadataResource="Instance"
     NotifyResource="Instance"
     ResizeDev=(partial "userdata/rancheros/resize_dev")
