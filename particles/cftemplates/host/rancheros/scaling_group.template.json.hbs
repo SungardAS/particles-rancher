@@ -1,19 +1,27 @@
+---
+frontload:
+  amis:
+    loader: rancheros
+---
 {{#layout}}
 
   {{set "host/parameters_rancheros"}}
   {{set "host/parameters_scaling_group"}}
 
-  {{mapping "rancheros_ami" logicalId="RancherAmiMap"}}
-  {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
+  {{#with amis}}
+    {{mapping "rancheros_versions" logicalId="RancherVersionMap"}}
+  {{/with}}
 
   {{
     set "host/resources_scaling_group"
     cattleHostLabels=(ref "CattleHostLabels")
-    imageId='{"Fn::FindInMap": ["RancherAmiMap", {"Ref": "AWS::Region"}, {"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "mapName"]} ]}'
+    imageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
     signalCount=(ref "DesiredCapacity")
     userData=(
       partial "userdata/rancheros"
-      dockerVersion='{"Fn::FindInMap": ["RancherVersionMap", {"Ref": "OsVersion"}, "dockerVersion"]}'
+      dockerVersion=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "dockerVersion")
+      resizeDevCondition="Is050Condition"
+      resizeServiceCondition="Is050Condition"
       metadataResource="LaunchConfiguration"
       notifyResource="AutoScaleGroup"
     )

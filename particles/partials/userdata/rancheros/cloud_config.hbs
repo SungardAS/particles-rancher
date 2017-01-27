@@ -1,0 +1,21 @@
+{{#stringify}}
+#cloud-config
+rancher:
+  environment:
+    ${ResizeDev}
+  services_include:
+    kernel-headers: true
+    ${ResizeService}
+  services:
+    aws-cfn-bootstrap:
+      image: sungardas/aws-cfn-bootstrap:${DockerVersion}
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      environment:
+        CFN_METADATA_RESOURCE: ${MetadataResource}
+        CFN_NOTIFY_RESOURCE: ${NotifyResource}
+        CFN_CONFIG_SETS: ${ConfigSets}
+        CFN_STACK_NAME: ${AWS::StackName}
+        AWS_REGION: ${AWS::Region}
+        AWS_DEFAULT_REGION: ${AWS::Region}
+{{/stringify}}

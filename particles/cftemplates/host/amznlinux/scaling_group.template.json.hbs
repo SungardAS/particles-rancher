@@ -1,3 +1,18 @@
+---
+frontload:
+  amazonAmi:
+    module: particles-ec2
+    loader: ami
+    opts:
+      Owners: ["amazon"]
+      Filters:
+        -
+          Name: state
+          Values: ["available"]
+        -
+          Name: name
+          Values: ["amzn-ami-hvm*x86_64-gp2"]
+---
 {{#layout}}
 
   {{set "host/parameters_amznlinux"}}
@@ -6,7 +21,7 @@
   {{
     set "host/resources_scaling_group"
     cattleHostLabels=(ref "CattleHostLabels")
-    imageId=(helper "m:amazon-ami" "region-ami" "amzn-ami-hvm-2016.03.1.x86_64-gp2")
+    imageId=amazonAmi
     signalCount=(ref "DesiredCapacity")
     userData=(
       partial "userdata/amznlinux"

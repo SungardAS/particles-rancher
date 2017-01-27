@@ -8,7 +8,7 @@ dockerCmd: docker
 ---
 { "Fn::Join" : ["", [
   {{helper "m:core" "propertyValue" dockerCmd}}," run -d ",
-  "  --restart=on-failure",
+  "  --restart=unless-stopped",
   "  -p ", {{helper "m:core" "propertyValue" hostPort}}, ":8080",
   "  -p ", {{helper "m:core" "propertyValue" clusterPort}}, ":9345",
   "  -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
