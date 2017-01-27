@@ -1,60 +1,12 @@
 {
   "Fn::Base64": {
-    "Fn::Join": [
-      "",
-      [
-        "#cloud-config\n",
-        "rancher:\n",
-        "  environment:\n",
-        {
-          "Fn::If": [
-            "Is050Compatible",
-            "    RESIZE_DEV: /dev/xvda\n",
-            ""
-          ]
-        },
-        "  services_include:\n",
-        "    kernel-headers: true\n",
-        {
-          "Fn::If": [
-            "Is050Compatible",
-            "    https://raw.githubusercontent.com/rancher/os-services/v0.4.5/r/resize-fs.yml: true\n",
-            ""
-          ]
-        },
-        "  services:\n",
-        "    aws-cfn-bootstrap:\n",
-        "      image: sungardas/aws-cfn-bootstrap:",
-        1.11,
-        "\n",
-        "      volumes:\n",
-        "        - /var/run/docker.sock:/var/run/docker.sock\n",
-        "      environment:\n",
-        "        CFN_METADATA_RESOURCE: ",
-        "",
-        "\n",
-        "        CFN_NOTIFY_RESOURCE: ",
-        "",
-        "\n",
-        "        CFN_CONFIG_SETS: ",
-        "default",
-        "\n",
-        "        CFN_STACK_NAME: ",
-        {
-          "Ref": "AWS::StackName"
-        },
-        "\n",
-        "        AWS_REGION: ",
-        {
-          "Ref": "AWS::Region"
-        },
-        "\n",
-        "        AWS_DEFAULT_REGION: ",
-        {
-          "Ref": "AWS::Region"
-        },
-        "\n"
-      ]
+    "Fn::Sub": [
+      "#cloud-config\nrancher:\n  environment:\n    ${ResizeDev}\n  services_include:\n    kernel-headers: true\n    ${ResizeService}\n  services:\n    aws-cfn-bootstrap:\n      image: sungardas/aws-cfn-bootstrap:${DockerVersion}\n      volumes:\n        - /var/run/docker.sock:/var/run/docker.sock\n      environment:\n        CFN_METADATA_RESOURCE: ${MetadataResource}\n        CFN_NOTIFY_RESOURCE: ${NotifyResource}\n        CFN_CONFIG_SETS: ${ConfigSets}\n        CFN_STACK_NAME: ${AWS::StackName}\n        AWS_REGION: ${AWS::Region}\n        AWS_DEFAULT_REGION: ${AWS::Region}\n",
+      {
+        "ConfigSets": "default",
+        "ResizeDev": "",
+        "ResizeService": ""
+      }
     ]
   }
 }

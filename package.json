@@ -38,12 +38,12 @@
   ],
   "dependencies": {
     "async": "^2.1.4",
-    "condensation": "sungardas/condensation#develop",
+    "condensation": "^0.6.5-rc0",
     "config": "^1.20.1",
     "git-rev-sync": "^1.6.0",
     "gulp": "^3.9.1",
     "particles-core": "^0.4.6",
-    "particles-ec2": "sungardas/particles-ec2#develop",
+    "particles-ec2": "^0.4.0-rc1",
     "particles-rds": "^0.1.0-beta.0",
     "particles-vpc": "^0.5.0"
   },
