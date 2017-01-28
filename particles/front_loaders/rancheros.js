@@ -2,11 +2,11 @@ var async = require("async");
 var amiLoader = require("particles-ec2/particles/front_loaders/ami")
 
 module.exports = function amis(opts,cb) {
-  amiLoader = amiLoader.bind(this);
+  var loader = amiLoader.bind(this);
 
   async.auto(
     {
-      "rancheros045": async.apply(amiLoader,
+      "rancheros045": async.apply(loader,
         {
           Owners: ["605812595337"],
           Filters: [
@@ -15,7 +15,7 @@ module.exports = function amis(opts,cb) {
           ]
         }
       ),
-      "rancheros050": async.apply(amiLoader,
+      "rancheros050": async.apply(loader,
         {
           Owners: ["605812595337"],
           Filters: [
@@ -24,7 +24,7 @@ module.exports = function amis(opts,cb) {
           ]
         }
       ),
-      "rancheros060": async.apply(amiLoader,
+      "rancheros060": async.apply(loader,
         {
           Owners: ["605812595337"],
           Filters: [
@@ -33,7 +33,7 @@ module.exports = function amis(opts,cb) {
           ]
         }
       ),
-      "rancheros070": async.apply(amiLoader,
+      "rancheros070": async.apply(loader,
         {
           Owners: ["605812595337"],
           Filters: [
@@ -42,7 +42,7 @@ module.exports = function amis(opts,cb) {
           ]
         }
       ),
-      "rancheros07x": async.apply(amiLoader,
+      "rancheros07x": async.apply(loader,
         {
           Owners: ["605812595337"],
           Filters: [
