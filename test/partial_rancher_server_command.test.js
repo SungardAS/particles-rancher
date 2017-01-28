@@ -29,4 +29,20 @@ describe("partials", function() {
       }}
     );
   });
+
+  it("will set --advertise-address", function() {
+    cTests.testParticle(
+      "partial",
+      "server/start_command",
+      require("./fixtures/partial_rancher_server_command_output_3"),
+      {hArgs: {
+        cattleDbCattleMysqlName: "dbName",
+        cattleDbCattleUsername: "username",
+        cattleDbCattlePassword: "password",
+        cattleDbCattleMysqlHost: "localhost",
+        cattleDbCattleMysqlPort: 3306,
+        cattleClusterAdvertiseAddress: "10.0.1.3"
+      }}
+    );
+  });
 });

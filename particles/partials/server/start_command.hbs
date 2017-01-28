@@ -10,7 +10,6 @@ dockerCmd: docker
   "  -p ", {{helper "m:core" "propertyValue" hostPort}}, ":8080",
   "  -p ", {{helper "m:core" "propertyValue" clusterPort}}, ":9345",
   "  -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
-  {{#if cattleClusterAdvertiseAddress}}" -e CATTLE_CLUSTER_ADVERTISE_ADDRESS=", {{helper "m:core" "propertyValue" cattleClusterAdvertiseAddress}},{{/if}}
   {{#if cattleHostApiProxyMode}}" -e CATTLE_HOST_API_PROXY_MODE=", {{helper "m:core" "propertyValue" cattleHostApiProxyMode}},{{/if}}
   {{#if defaultCattleMachineExecute}}" -e DEFAULT_CATTLE_MACHINE_EXECUTE=", {{helper "m:core" "propertyValue" defaultCattleMachineExecute}},{{/if}}
   {{#if cattleZookeeperConnectionString}}" -e CATTLE_ZOOKEEPER_CONNECTION_STRING=", {{helper "m:core" "propertyValue" cattleZookeeperConnectionString}},{{/if}}
@@ -22,5 +21,6 @@ dockerCmd: docker
   {{#if cattleDbCattleMysqlPort}}" -e CATTLE_DB_CATTLE_MYSQL_PORT=", {{helper "m:core" "propertyValue" cattleDbCattleMysqlPort}},{{/if}}
   {{#if cattleRedisHosts}}" -e CATTLE_REDIS_HOSTS=", {{helper "m:core" "propertyValue" cattleRedisHosts}},{{/if}}
   {{#if cattleRedisPort}}" -e CATTLE_REDIS_PORT=", {{helper "m:core" "propertyValue" cattleRedisPort}},{{/if}}
-  "  ", {{helper "m:core" "propertyValue" rancherServerImage}}
+  "  ", {{helper "m:core" "propertyValue" rancherServerImage}},
+  {{#if cattleClusterAdvertiseAddress}}" --advertise-address {{cattleClusterAdvertiseAddress}}"{{else}}""{{/if}}
 ]]}
