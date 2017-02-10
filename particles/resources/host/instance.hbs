@@ -1,17 +1,22 @@
-{{#resource "ec2_instance"}}
+{{#resource "m:core" "spec"
+  type="AWS::EC2::Instance"
+  BlockDeviceMappings=(
+    arrayify
+    (
+      helper "m:core" "propertySpec"
+      type="AWS::EC2::Instance.BlockDeviceMapping"
+      DeviceName="/dev/sda1"
+      Ebs=(
+        helper "m:core" "propertySpec"
+        type="AWS::EC2::Instance.Ebs"
+        DeleteOnTermination="true"
+        VolumeSize=(cValue volumeSize)
+        VolumeType="gp2"
+      )
+    )
+  )
+}}
 "Metadata": {
   "AWS::CloudFormation::Init": {{partial "host/cf_init"}}
-},
-"Properties": {
-  "BlockDeviceMappings": [
-    {
-      "DeviceName": "/dev/sda1",
-      "Ebs": {
-        "DeleteOnTermination": "true",
-        "VolumeSize": {{helper "m:core" "propertyValue" volumeSize}},
-        "VolumeType": "gp2"
-      }
-    }
-  ]
 }
 {{/resource}}

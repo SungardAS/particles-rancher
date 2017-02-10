@@ -1,17 +1,22 @@
-{{#resource "launch_configuration"}}
+{{#resource "m:core" "spec"
+  type="AWS::AutoScaling::LaunchConfiguration"
+  BlockDeviceMappings=(
+    arrayify
+    (
+      helper "m:core" "propertySpec"
+      type="AWS::AutoScaling::LaunchConfiguration.BlockDeviceMapping"
+      DeviceName="/dev/sda1"
+      Ebs=(
+        helper "m:core" "propertySpec"
+        type="AWS::AutoScaling::LaunchConfiguration.BlockDevice"
+        DeleteOnTermination="true"
+        VolumeSize=(cValue volumeSize)
+        VolumeType="gp2"
+      )
+    )
+  )
+}}
 "Metadata": {
   "AWS::CloudFormation::Init": {{partial "host/cf_init"}}
-},
-"Properties": {
-  "BlockDeviceMappings": [
-    {
-      "DeviceName": "/dev/sda1",
-      "Ebs": {
-        "DeleteOnTermination": "true",
-        "VolumeSize": {{helper "m:core" "propertyValue" volumeSize}},
-        "VolumeType": "gp2"
-      }
-    }
-  ]
 }
 {{/resource}}

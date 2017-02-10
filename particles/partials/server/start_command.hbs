@@ -5,22 +5,22 @@ clusterPort: 9345
 dockerCmd: docker
 ---
 { "Fn::Join" : ["", [
-  {{helper "m:core" "propertyValue" dockerCmd}}," run -d ",
+  {{cValue dockerCmd}}," run -d ",
   "  --restart=unless-stopped",
-  "  -p ", {{helper "m:core" "propertyValue" hostPort}}, ":8080",
-  "  -p ", {{helper "m:core" "propertyValue" clusterPort}}, ":9345",
+  "  -p ", {{cValue hostPort}}, ":8080",
+  "  -p ", {{cValue clusterPort}}, ":9345",
   "  -e 'AWS_REGION=", {"Ref": "AWS::Region"}, "'",
-  {{#if cattleHostApiProxyMode}}" -e CATTLE_HOST_API_PROXY_MODE=", {{helper "m:core" "propertyValue" cattleHostApiProxyMode}},{{/if}}
-  {{#if defaultCattleMachineExecute}}" -e DEFAULT_CATTLE_MACHINE_EXECUTE=", {{helper "m:core" "propertyValue" defaultCattleMachineExecute}},{{/if}}
-  {{#if cattleZookeeperConnectionString}}" -e CATTLE_ZOOKEEPER_CONNECTION_STRING=", {{helper "m:core" "propertyValue" cattleZookeeperConnectionString}},{{/if}}
-  {{#if cattleHostApiProxyHost}}" -e CATTLE_HOST_API_PROXY_HOST=", {{helper "m:core" "propertyValue" cattleHostApiProxyHost}},{{/if}}
-  {{#if cattleDbCattleMysqlName}}" -e CATTLE_DB_CATTLE_MYSQL_NAME=", {{helper "m:core" "propertyValue" cattleDbCattleMysqlName}},{{/if}}
-  {{#if cattleDbCattleUsername}}" -e CATTLE_DB_CATTLE_USERNAME=", {{helper "m:core" "propertyValue" cattleDbCattleUsername}},{{/if}}
-  {{#if cattleDbCattlePassword}}" -e CATTLE_DB_CATTLE_PASSWORD=", {{helper "m:core" "propertyValue" cattleDbCattlePassword}},{{/if}}
-  {{#if cattleDbCattleMysqlHost}}" -e CATTLE_DB_CATTLE_MYSQL_HOST=", {{helper "m:core" "propertyValue" cattleDbCattleMysqlHost}},{{/if}}
-  {{#if cattleDbCattleMysqlPort}}" -e CATTLE_DB_CATTLE_MYSQL_PORT=", {{helper "m:core" "propertyValue" cattleDbCattleMysqlPort}},{{/if}}
-  {{#if cattleRedisHosts}}" -e CATTLE_REDIS_HOSTS=", {{helper "m:core" "propertyValue" cattleRedisHosts}},{{/if}}
-  {{#if cattleRedisPort}}" -e CATTLE_REDIS_PORT=", {{helper "m:core" "propertyValue" cattleRedisPort}},{{/if}}
-  "  ", {{helper "m:core" "propertyValue" rancherServerImage}},
+  {{#if cattleHostApiProxyMode}}" -e CATTLE_HOST_API_PROXY_MODE=", {{cValue cattleHostApiProxyMode}},{{/if}}
+  {{#if defaultCattleMachineExecute}}" -e DEFAULT_CATTLE_MACHINE_EXECUTE=", {{cValue defaultCattleMachineExecute}},{{/if}}
+  {{#if cattleZookeeperConnectionString}}" -e CATTLE_ZOOKEEPER_CONNECTION_STRING=", {{cValue cattleZookeeperConnectionString}},{{/if}}
+  {{#if cattleHostApiProxyHost}}" -e CATTLE_HOST_API_PROXY_HOST=", {{cValue cattleHostApiProxyHost}},{{/if}}
+  {{#if cattleDbCattleMysqlName}}" -e CATTLE_DB_CATTLE_MYSQL_NAME=", {{cValue cattleDbCattleMysqlName}},{{/if}}
+  {{#if cattleDbCattleUsername}}" -e CATTLE_DB_CATTLE_USERNAME=", {{cValue cattleDbCattleUsername}},{{/if}}
+  {{#if cattleDbCattlePassword}}" -e CATTLE_DB_CATTLE_PASSWORD=", {{cValue cattleDbCattlePassword}},{{/if}}
+  {{#if cattleDbCattleMysqlHost}}" -e CATTLE_DB_CATTLE_MYSQL_HOST=", {{cValue cattleDbCattleMysqlHost}},{{/if}}
+  {{#if cattleDbCattleMysqlPort}}" -e CATTLE_DB_CATTLE_MYSQL_PORT=", {{cValue cattleDbCattleMysqlPort}},{{/if}}
+  {{#if cattleRedisHosts}}" -e CATTLE_REDIS_HOSTS=", {{cValue cattleRedisHosts}},{{/if}}
+  {{#if cattleRedisPort}}" -e CATTLE_REDIS_PORT=", {{cValue cattleRedisPort}},{{/if}}
+  "  ", {{cValue rancherServerImage}},
   {{#if cattleClusterAdvertiseAddress}}" --advertise-address {{cattleClusterAdvertiseAddress}}"{{else}}""{{/if}}
 ]]}

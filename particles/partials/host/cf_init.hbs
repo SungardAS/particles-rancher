@@ -12,12 +12,12 @@
           {{ref "AWS::Region"}},
           "&account=",{{ref "AWS::AccountId"}},
           "&stack-name=",{{ref "AWS::StackName"}},
-          "&",{"Fn::Join" : ["&",{{helper "m:core" "propertyValue" cattleHostLabels}}]},
+          "&",{"Fn::Join" : ["&",{{cValue cattleHostLabels}}]},
           "\"",
           " -d --privileged -v /var/run/docker.sock:/var/run/docker.sock ",
-          {{helper "m:core" "propertyValue" rancherAgentImage}},
+          {{cValue rancherAgentImage}},
           " ",
-          {{helper "m:core" "propertyValue" rancherRegistrationUrl}}
+          {{cValue rancherRegistrationUrl}}
         ]]}
       }
     }

@@ -1,8 +1,8 @@
 {{#resource "m:ec2" "load_balancer"}}
   "Properties": {
     "CrossZone": true,
-    "SecurityGroups": {{helper "m:core" "propertyValue" securityGroups}},
-    "Subnets": {{helper "m:core" "propertyValue" subnets}},
+    "SecurityGroups": {{cValue securityGroups}},
+    "Subnets": {{cValue subnets}},
     "ConnectionSettings": {
       "IdleTimeout": 3600
     },

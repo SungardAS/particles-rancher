@@ -1,13 +1,16 @@
+---
+signalTimeout: PT7M
+---
 {{set "instance_profile"}}
 
 {{
   resource "host/launch_configuration"
   logicalId="LaunchConfiguration"
   iamInstanceProfile=(
-    partial "m:core" "fn_if"
-    conditionId=(scopeId "InstanceProfileRoleIsPopulated")
-    trueValue=(ref "InstanceProfile")
-    falseValue=(ref "AWS::NoValue")
+    fnIf
+    (scopeId "InstanceProfileRoleIsPopulated")
+    (ref "InstanceProfile")
+    (ref "AWS::NoValue")
   )
   imageId=imageId
   instanceType=(ref "InstanceType")
@@ -19,12 +22,19 @@
   volumeSize=(ref "VolumeSize")
 }}
 
-{{
-  resource "host/autoscale_group"
+{{#resource "m:core" "spec"
+  type="AWS::AutoScaling::AutoScalingGroup"
   logicalId="AutoScaleGroup"
-  launchConfigurationName=(ref "LaunchConfiguration")
-  desiredCapacity=(ref "DesiredCapacity")
-  maxSize=(ref "MaxSize")
-  minSize=(ref "MinSize")
-  vpcZoneIdentifier=(ref "SubnetIds")
+  LaunchConfigurationName=(ref "LaunchConfiguration")
+  DesiredCapacity=(ref "DesiredCapacity")
+  MaxSize=(ref "MaxSize")
+  MinSize=(ref "MinSize")
+  VPCZoneIdentifier=(ref "SubnetIds")
 }}
+"CreationPolicy": {
+  "ResourceSignal": {
+    "Count": {{cValue signalCount}},
+    "Timeout": {{cValue signalTimeout}}
+  }
+}
+{{/resource}}
