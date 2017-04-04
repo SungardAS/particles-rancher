@@ -6,20 +6,20 @@ signalTimeout: PT7M
 {{
   resource "host/launch_configuration"
   logicalId="LaunchConfiguration"
-  iamInstanceProfile=(
+  rancherAgentImage=(ref "RancherAgentImage")
+  rancherRegistrationUrl=(ref "RancherRegistrationUrl")
+  IamInstanceProfile=(
     fnIf
     (scopeId "InstanceProfileRoleIsPopulated")
     (ref "InstanceProfile")
     (ref "AWS::NoValue")
   )
-  imageId=imageId
-  instanceType=(ref "InstanceType")
-  keyName=(ref "KeyPairName")
-  rancherAgentImage=(ref "RancherAgentImage")
-  rancherRegistrationUrl=(ref "RancherRegistrationUrl")
-  securityGroups=(ref "SecurityGroupIds")
-  userData=userData
-  volumeSize=(ref "VolumeSize")
+  ImageId=imageId
+  InstanceType=(ref "InstanceType")
+  KeyName=(ref "KeyPairName")
+  SecurityGroups=(ref "SecurityGroupIds")
+  UserData=userData
+  VolumeSize=(ref "VolumeSize")
 }}
 
 {{#resource "m:core" "spec"

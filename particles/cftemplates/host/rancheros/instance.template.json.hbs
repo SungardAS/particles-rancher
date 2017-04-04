@@ -14,8 +14,8 @@ frontload:
   {{
     set "host/instance"
     cattleHostLabels=(ref "CattleHostLabels")
-    imageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
-    userData=(
+    ImageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
+    UserData=(
       partial "userdata/rancheros"
       dockerVersion=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "dockerVersion")
       resizeDevCondition="Is050Condition"

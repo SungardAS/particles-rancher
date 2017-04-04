@@ -19,8 +19,8 @@ frontload:
   {{
     set "host/instance"
     cattleHostLabels=(ref "CattleHostLabels")
-    imageId=amazonAmi
-    userData=(
+    ImageId=amazonAmi
+    UserData=(
       partial "userdata/amznlinux"
       dockerVersion='1.11'
       metadataResource="Instance"

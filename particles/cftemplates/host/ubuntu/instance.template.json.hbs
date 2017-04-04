@@ -22,8 +22,8 @@ frontload:
   {{
     set "host/instance"
     cattleHostLabels=(ref "CattleHostLabels")
-    imageId=(fnFindInMap "VersionMap" (ref "DockerVersion") "ami")
-    userData=(
+    ImageId=(fnFindInMap "VersionMap" (ref "DockerVersion") "ami")
+    UserData=(
       partial "userdata/ubuntu"
       dockerPackage=(fnFindInMap "VersionMap" (ref "DockerVersion") "dockerPackage")
       cfnBootstrapTag=(fnFindInMap "VersionMap" (ref "DockerVersion") "dockerVersion")

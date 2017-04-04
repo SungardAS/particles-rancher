@@ -64,19 +64,19 @@ frontload:
     cattleDbCattleMysqlPort=(ref "DBPort")
     cattleDbCattlePassword=(ref "DBPassword")
     cattleDbCattleUsername=(ref "DBUser")
-    desiredCapacity=(ref "DesiredCapacity")
-    imageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
-    instanceType=(ref "InstanceType")
-    keyName=(ref "KeyPairName")
-    launchConfigurationName=(ref "LaunchConfiguration")
-    maxSize=(ref "MaxSize")
-    minSize=(ref "MinSize")
     rancherAgentImage=(ref "RancherAgentImage")
     rancherRegistrationUrl=(ref "RancherRegistrationUrl")
     rancherServerImage=(ref "RancherServerImage")
-    securityGroups=(arrayify (ref "SecurityGroup") )
-    signalCount=(ref "DesiredCapacity")
-    userData=(
+    DesiredCapacity=(ref "DesiredCapacity")
+    ImageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
+    InstanceType=(ref "InstanceType")
+    KeyName=(ref "KeyPairName")
+    LaunchConfigurationName=(ref "LaunchConfiguration")
+    MaxSize=(ref "MaxSize")
+    MinSize=(ref "MinSize")
+    SecurityGroups=(arrayify (ref "SecurityGroup") )
+    SignalCount=(ref "DesiredCapacity")
+    UserData=(
       partial "userdata/rancheros"
       dockerVersion=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "dockerVersion")
       resizeDevCondition="Is050Condition"
@@ -84,9 +84,9 @@ frontload:
       metadataResource="LaunchConfiguration"
       notifyResource="AutoScaleGroup"
     )
-    volumeSize=(ref "VolumeSize")
-    vpcZoneIdentifier=(ref "SubnetIds")
-    vpcId=(ref "VpcId")
+    VolumeSize=(ref "VolumeSize")
+    VpcZoneIdentifier=(ref "SubnetIds")
+    VpcId=(ref "VpcId")
   }}
 
   {{

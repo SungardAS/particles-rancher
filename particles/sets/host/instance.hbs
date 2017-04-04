@@ -3,13 +3,13 @@
 {{
   resource "host/instance"
   logicalId="Instance"
-  imageId=imageId
-  instanceType=(ref "InstanceType")
-  keyName=(ref "KeyPairName")
   rancherAgentImage=(ref "RancherAgentImage")
   rancherRegistrationUrl=(ref "RancherRegistrationUrl")
-  securityGroupIds=(ref "SecurityGroupIds")
-  subnetId=(ref "SubnetId")
-  userData=userData
-  volumeSize=(ref "VolumeSize")
+  ImageId=imageId
+  InstanceType=(ref "InstanceType")
+  KeyName=(ref "KeyPairName")
+  SecurityGroupIds=(ref "SecurityGroupIds")
+  SubnetId=(ref "SubnetId")
+  UserData=userData
+  VolumeSize=(ref "VolumeSize")
 }}
