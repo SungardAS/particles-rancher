@@ -2,8 +2,20 @@
 {{parameter "m:vpc" "security_group/id_list" logicalId="SecurityGroupIds"}}
 {{parameter "m:ec2" "key_pair/key_name" logicalId="KeyPairName"}}
 {{parameter "m:core" "base" type="Number" logicalId="VolumeSize" default=8}}
-{{parameter "m:core" "base" type="String" logicalId="RancherAgentImage"}}
-{{parameter "m:core" "base" type="String" logicalId="RancherRegistrationUrl" description="Rancher registration URL"}}
+
+{{
+  parameter "m:core" "base"
+  type="String"
+  logicalId="RancherAgentImage"
+  description="rancher/agent:vX.X.X"
+}}
+
+{{
+  parameter "m:core" "base"
+  type="String"
+  logicalId="RancherRegistrationUrl"
+  description="Rancher registration URL https://HOST/v1/scripts/KEY"
+}}
 
 
 {{parameter "cattle_host_labels" logicalId="CattleHostLabels"}}
