@@ -1,14 +1,14 @@
-{{#resource "m:core" "base" type="AWS::ElasticLoadBalancingV2::TargetGroup"}}
-  "Properties": {
-    "HealthCheckIntervalSeconds": 20,
-    "HealthCheckPath": "/ping",
-    "HealthCheckPort": 8080,
-    "HealthCheckProtocol": "HTTP",
-    "HealthCheckTimeoutSeconds": 5,
-    "HealthyThresholdCount": 2,
-    "Port": 8080,
-    "Protocol": "HTTP",
-    "UnhealthyThresholdCount": 2,
-    "VpcId": {{helper "m:core" "propertyValue" vpcId}}
-  }
-{{/resource}}
+{{
+  resource "m:core" "spec"
+  type="AWS::ElasticLoadBalancingV2::TargetGroup"
+  HealthCheckIntervalSeconds=20
+  HealthCheckPath="/ping"
+  HealthCheckPort=8080
+  HealthCheckProtocol="HTTP"
+  HealthCheckTimeoutSeconds=5
+  HealthyThresholdCount=2
+  Port=8080
+  Protocol="HTTP"
+  UnhealthyThresholdCount=2
+  VpcId=(cValue vpcId)
+}}

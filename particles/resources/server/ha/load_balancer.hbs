@@ -1,6 +1,0 @@
-{{#resource "m:core" "base" type="AWS::ElasticLoadBalancingV2::LoadBalancer"}}
-  {{#helper "m:core" "properties"}}
-    {{helper "m:core" "property" "SecurityGroups" optional=true}}
-    {{helper "m:core" "property" "Subnets"}}
-  {{/helper}}
-{{/resource}}

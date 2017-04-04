@@ -1,7 +1,12 @@
-{{resource "server/ha/load_balancer" logicalId="LoadBalancer"}}
+{{
+  resource "m:core" "spec"
+  type="AWS::ElasticLoadBalancingV2::LoadBalancer"
+  logicalId="LoadBalancer"
+}}
+
 {{resource "server/ha/target_group" logicalId="LoadBalancerTargetGroup"}}
 
-{{#resource logicalId="LoadBalancerListener"}}
+{{#resource "m:core" "base" logicalId="LoadBalancerListener"}}
   "Type" : "AWS::ElasticLoadBalancingV2::Listener",
   "Properties" : {
     "DefaultActions": [

@@ -50,6 +50,24 @@ module.exports = function amis(opts,cb) {
             {Name: "name", Values: ["rancheros-v0.7.?-hvm*"]}
           ]
         }
+      ),
+      "rancheros08x": async.apply(loader,
+        {
+          Owners: ["605812595337"],
+          Filters: [
+            {Name: "state", Values: ["available"]},
+            {Name: "name", Values: ["rancheros-v0.8.?-hvm*"]}
+          ]
+        }
+      ),
+      "rancheros09x": async.apply(loader,
+        {
+          Owners: ["605812595337"],
+          Filters: [
+            {Name: "state", Values: ["available"]},
+            {Name: "name", Values: ["rancheros-v0.9.?-hvm*"]}
+          ]
+        }
       )
     },
     cb

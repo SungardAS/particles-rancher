@@ -1,4 +1,4 @@
-{{#resource "launch_configuration"}}
+{{#resource "m:core" "spec" type="AWS::AutoScaling::LaunchConfiguration"}}
 "Metadata": {
   "AWS::CloudFormation::Init": {{partial "server/cf_init"}}
 },
@@ -8,7 +8,7 @@
       "DeviceName": "/dev/sda1",
       "Ebs": {
         "DeleteOnTermination": "true",
-        "VolumeSize": {{helper "m:core" "propertyValue" volumeSize}},
+        "VolumeSize": {{cValue volumeSize}},
         "VolumeType": "gp2"
       }
     }
