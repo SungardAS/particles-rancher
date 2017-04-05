@@ -15,9 +15,9 @@ frontload:
   {{
     set "host/resources_scaling_group"
     cattleHostLabels=(ref "CattleHostLabels")
-    ImageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
-    SignalCount=(ref "DesiredCapacity")
-    UserData=(
+    imageId=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "ami")
+    signalCount=(ref "DesiredCapacity")
+    userData=(
       partial "userdata/rancheros"
       dockerVersion=(fnFindInMap "RancherVersionMap" (ref "OsVersion") "dockerVersion")
       resizeDevCondition="Is050Condition"
