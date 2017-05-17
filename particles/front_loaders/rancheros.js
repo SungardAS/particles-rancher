@@ -69,6 +69,15 @@ module.exports = function amis(opts,cb) {
           ]
         }
       )
+      "rancheros10x": async.apply(loader,
+        {
+          Owners: ["605812595337"],
+          Filters: [
+            {Name: "state", Values: ["available"]},
+            {Name: "name", Values: ["rancheros-v1.0.?-hvm*"]}
+          ]
+        }
+      )
     },
     cb
   );
